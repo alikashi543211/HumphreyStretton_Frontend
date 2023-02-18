@@ -1,0 +1,454 @@
+<div class="dashboard-main mr-30">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ACCOUNTS</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="search-inputs d-flex">
+                <div class="input-style mr-10">
+
+                    <div class="type-pass">
+                        <input type="text" id="start_date" class="ctm-input" placeholder="Select Month" name="start_date" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'MMMM, YYYY', minMode:'month',containerClass:'theme-red'}" (bsValueChange)="monthValue($event)" [bsValue]="accountsMonth">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <i-feather class="calender" name="calendar"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <a class="account-hover" href="javascript:void(0)">
+                <div class="card-accounts">
+                    <div class="sale-label-account">
+                        sales
+                    </div>
+                    <div class="account-width d-flex align-items-center justify-content-between">
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Doors</h3>
+                            <p class="doors-price-account">{{ account?.sales.door | currency:'GBP':'symbol' }}</p>
+                        </div>
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Frames</h3>
+                            <p class="doors-price-account">{{ account?.sales.frame | currency:'GBP':'symbol' }}</p>
+                        </div>
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Others</h3>
+                            <p class="doors-price-account">{{ account?.sales.other | currency:'GBP':'symbol' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a class="account-hover" href="javascript:void(0)">
+                <div class="card-accounts card-account-orange">
+                    <div class="sale-label-account">
+                        Workload
+                    </div>
+                    <div class="account-width d-flex align-items-center justify-content-between">
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Predicted Workload</h3>
+                            <p class="doors-price-account">{{ account?.workload.predicted_workload | currency:'GBP':'symbol' }}</p>
+                        </div>
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Projected Sales</h3>
+                            <p class="doors-price-account">{{ account?.workload.projected_sales | currency:'GBP':'symbol' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a class="account-hover" href="javascript:void(0)">
+                <div class="card-accounts card-account-light-green">
+                    <div class="sale-label-account">
+                        In progress
+                    </div>
+                    <div class="account-width d-flex align-items-center justify-content-between">
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Work in progress</h3>
+                            <p class="doors-price-account">{{ account?.in_progress.work_in_progress | currency:'GBP':'symbol'}}</p>
+                        </div>
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Bought</h3>
+                            <p class="doors-price-account">{{ account?.in_progress.bought | currency:'GBP':'symbol' }}</p>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </a>
+        </div>
+        <div class="col-md-2 col-sm-6">
+            <a class="account-hover" href="javascript:void(0)">
+                <div class="card-accounts card-account-green">
+                    <div class="sale-label-account">
+                        Profit
+                    </div>
+                    <div class=" d-flex align-items-center justify-content-between">
+                        <div class="inner-card-box">
+                            <h3 class="text-account">Projected Profit</h3>
+                            <p class="doors-price-account">{{ account?.profit.projected_profit | currency:'GBP':'symbol' }}</p>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="roles-main account-main-box">
+            <div class="d-flex align-items-center justify-content-between acount-line-btn">
+                <div class="d-flex">
+                    <a class="Invoice" href="javascript:void(0)" (click)="addSalesOrder()" *ngIf="_auth.checkPermissions('accounts','write')">
+                        <i-feather class="plus" name="plus"></i-feather> Add Sales Order
+                    </a>
+                    <a class="Delivery-Note" href="javascript:void(0)" (click)="addPurchaseOrder()" *ngIf="_auth.checkPermissions('accounts','write')">
+                        <i-feather class="plus" name="plus"></i-feather> Add Purchase Order
+                    </a>
+
+                    <a class="Schedule" [routerLink]="['/accounts/credit-check']">
+                        Credit Check
+                    </a>
+                    <a class="Schedule sales-order" (click)="calculateSalesOrder()">
+                        Calculate sales order
+                    </a>
+                </div>
+                <!-- <div class="search-last">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" [(ngModel)]="searchParams.search" (input)="searchOrder()">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+                </div> -->
+
+            </div>
+            <div class="search-last">
+                <div class="form-group sear-bar-roles position-relative mb-0">
+                    <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" [(ngModel)]="searchParams.search" (input)="searchOrder()">
+                    <i-feather class="search-ctm" name="search"></i-feather>
+                </div>
+            </div>
+            <div class="tabs-table-account ">
+                <div class="d-flex tabs-account-setts align-items-center justify-content-between">
+                    <ul class="nav nav-tabs" role="tablist">
+
+                        <li class="nav-item ">
+                            <a class="nav-link active" data-toggle="tab" href="#menu1" (click)="changeTab('salesOrder')">Sales Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu2" (click)="changeTab('monthlyCost')">Monthly Cost</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Customer" (click)="changeTab('customerTotal')">Customer Totals</a>
+                        </li>
+                    </ul>
+                    <div class="dropdown">
+                        <button class="credit-check dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i-feather class="download" name="download"></i-feather> Download Data
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                            <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content">
+
+                    <div id="menu1" class=" tab-pane active ">
+                        <div class="tab-table tab-table-account-ctm">
+                            <div class="tables-roles-main tables-users-main table-responsive">
+                                <table class="table">
+                                    <thead class="thead-ctm">
+                                        <tr>
+                                            <th class="cursor-pointer" (click)="sortData('work_orders.work_number')">
+                                                <p class="inner-cell">Work <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                                <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('products.name')">
+                                                <p class="inner-cell">Product <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Door</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Frame</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Delivery Fee</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Other</p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('work_orders.status')">
+                                                <p class="inner-cell">Status <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.status' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.status' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('work_orders.progress')">
+                                                <p class="inner-cell">Progress <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.progress' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.progress' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Delivery Note</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Month</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Notes</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Additional Notes</p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('invoice_in_full')">
+                                                <p class="inner-cell">Invoiced in full <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_in_full' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_in_full' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Actions</p>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="t-body-ctm">
+                                        <tr class="active-row" *ngFor="let sale of salesOrder;let i = index" [ngClass]="{'order-withdrawn': sale.work_order.on_hold || sale.work_order.status == 'Withdrawn','order-to-factory':sale.work_order.status == 'To Factory'}">
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.work_number }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.customer.name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.quantity + ' ' + sale.work_order.product.name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.product.name == 'Doors' ? sale.value : '0.00' }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.product.name == 'Frame' ? sale.value : '0.00' }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.quotation?.delivery_fee }}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.product.name != 'Doors' && sale.work_order.product.name != 'Frame' ? sale.value+sale.other : (sale.other == 0 ? '0.00' : sale.other) }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.on_hold ? 'On Hold' : sale.work_order.status }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.work_order.progress }}%</p>
+                                            </td>
+                                            <td>
+                                                <div class="inner-cell list-icons-talbe-sec">
+                                                    <a class="icon-anchor-list red" *ngIf="sale.work_order.delivery_notes_count > 1" [routerLink]="['/rod/delivery-notes', sale.work_order.id]">Multiple</a>
+                                                    <a class="icon-anchor-list" *ngIf="sale.work_order.delivery_notes_count == 0">
+                                                        - <i-feather class="icon-width" name="edit-2" [routerLink]="['/rod/delivery-notes', sale.work_order.id]"></i-feather>
+                                                    </a>
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['/rod/delivery-notes', sale.work_order.id]" *ngIf="sale.work_order.delivery_notes_count == 1">
+                                                        {{ sale.work_order.delivery_notes[0]?.ticket_no }} <i-feather class="icon-width" name="edit-2"></i-feather>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.month | date: 'MMMM, YYYY' }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="inner-cell view-anchor-tooltip">
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="sale.work_order.job_notes_count == '0'" (click)="addJobNote(sale.work_order.id,i)">
+                                                        <i-feather class="icon-width" name="plus"></i-feather>
+                                                    </a>
+                                                    <a class="view-anchor red" href="javascript:void(0)" *ngIf="sale.work_order.job_notes_count != '0'" (click)="addJobNote(sale.work_order.id,i)">
+                                                        View
+                                                    </a>
+                                                    <div class="tooltiptext-view" *ngIf="sale.work_order.job_notes_count != '0' && sale.work_order.latest_job_note.description">
+                                                        <div class="d-flex align-items-center justify-content-end">
+                                                            <a class="tooltip-anchor-modal" href="javascript:void(0)" (click)="addJobNote(sale.work_order.id,i)">
+                                                                Add Note <i-feather class="icon-width w15" name="plus"></i-feather></a>
+
+                                                        </div>
+                                                        <div class="toop-hight" [innerHtml]="sale.work_order.latest_job_note.description"></div>
+                                                        <div class="date-tooptip-iner">
+                                                            {{ sale.work_order.latest_job_note.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ sale.delivery_note }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="remember-me d-flex justify-content-center">
+                                                    <label class="custom-check custom-check-r">
+                                                        <input type="checkbox" [checked]="sale.invoice_in_full" (change)="updateSaleStatus(sale.id,i)" [disabled]="!_auth.checkPermissions('accounts','write')">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="inner-cell list-icons-talbe">
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['/rod/delivery-notes', sale.work_order_id]">
+                                                        <i-feather class="icon-width" name="book"></i-feather>
+                                                    </a>
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" (click)="viewTimeline(sale,i)">
+                                                        <i-feather class="icon-width" name="trending-up"></i-feather>
+                                                    </a>
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" (click)="editSalesOrder(sale,i)" *ngIf="_auth.checkPermissions('accounts','write')">
+                                                        <i-feather class="icon-width" name="edit-3"></i-feather>
+                                                    </a>
+                                                    <a class="icon-anchor-list" href="javascript:void(0)" (click)="deleteOrder(sale,i)" *ngIf="_auth.checkPermissions('accounts','write')">
+                                                        <i-feather class="icon-width" name="trash"></i-feather>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="menu2" class=" tab-pane fade">
+                        <div class="tab-table tab-table-account-ctm">
+                            <div class="tables-roles-main tables-users-main table-responsive">
+                                <table class="table">
+                                    <thead class="thead-ctm">
+                                        <tr>
+                                            <th class="cursor-pointer" (click)="sortData('order_number')">
+                                                <p class="inner-cell">Order Number <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('suppliers.name')">
+                                                <p class="inner-cell">Supplier <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'suppliers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'suppliers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('value')">
+                                                <p class="inner-cell">Value <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'value' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'value' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('work_number')">
+                                                <p class="inner-cell">Work# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Date</p>
+                                            </th>
+                                            <th class="cursor-pointer" (click)="sortData('checked')">
+                                                <p class="inner-cell">Checked <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'checked' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'checked' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Comments</p>
+                                            </th>
+                                            <th *ngIf="_auth.checkPermissions('accounts','write')">
+                                                <p class="inner-cell">Actions</p>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="t-body-ctm">
+                                        <tr class="active-row" *ngFor="let purchase of purchaseOrders;let i = index">
+                                            <td>
+                                                <p class="inner-cell">{{ purchase.order_number }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ purchase.supplier.name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ purchase.value }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell"><span *ngFor="let workOrder of purchase.work_orders;let i = index">
+                                                    {{ workOrder?.work_number }}<span *ngIf="i != purchase.work_orders.length-1">,&nbsp;
+                                                    </span></span>
+                                                </p>
+                                                <p class="inner-cell" *ngIf="purchase.work_orders.length == 0"> -- </p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ purchase.due_date | date:'dd-MMM-YYYY' }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="custom-box">
+                                                    <label class="switch" [ngClass]="{'disabbled':!_auth.checkPermissions('accounts','write')}">
+                                                        <input type="checkbox" [checked]="purchase.checked" (change)="markChecked(purchase,i)" [disabled]="!_auth.checkPermissions('accounts','write')">
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="inner-cell view-anchor-tooltip" *ngIf="purchase.note != ' '">
+                                                    <a class="view-anchor red" href="javascript:void(0)">
+                                                        View
+                                                    </a>
+                                                    <div class="tooltiptext-view">
+                                                        <div class="toop-hight" [innerHtml]="purchase.note"></div>
+                                                        <div class="date-tooptip-iner">
+                                                            {{ purchase.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td *ngIf="_auth.checkPermissions('accounts','write')">
+                                                <a class="icon-anchor-list" href="javascript:void(0)" (click)="editPurchaseOrder(purchase,i)">
+                                                    <i-feather class="icon-width" name="edit-3"></i-feather>
+                                                </a>
+                                                <a class="icon-anchor-list" href="javascript:void(0)" (click)="deletePurchaseOrder(purchase,i)">
+                                                    <i-feather class="icon-width" name="trash"></i-feather>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Customer" class=" tab-pane fade">
+                        <div class="tab-table tab-table-account-ctm">
+                            <div class="tables-roles-main tables-users-main table-responsive">
+                                <table class="table">
+                                    <thead class="thead-ctm">
+                                        <tr>
+                                            <th class="cursor-pointer" (click)="sortData('name')">
+                                                <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'name' && searchParams.sort_value == 'ASC'"></i></p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Total Doors</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Total Frames</p>
+                                            </th>
+                                            <th>
+                                                <p class="inner-cell">Total Other</p>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="t-body-ctm">
+                                        <tr class="active-row" *ngFor="let c of customerTotals">
+                                            <td>
+                                                <p class="inner-cell">{{ c.name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ c.sales.door }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ c.sales.frame }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="inner-cell">{{ c.sales.other }}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

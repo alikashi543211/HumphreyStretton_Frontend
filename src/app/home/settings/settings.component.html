@@ -1,0 +1,74 @@
+<ul class="breadcrumb" style="margin: 3rem 0;">
+    <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">SETTING</a></li>
+    <li class=" breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">PROFILE</a></li>
+</ul>
+
+<div class="profile-body">
+    <div class="main-profile">
+        <div class="pro-left-box-main">
+            <div class="profile-left-box">
+                <div class="profile-img">
+                    <div class="image-box">
+                        <img class="img-fluid" [src]="url" alt="pro-pics">
+                    </div>
+                    <label for="profile-image">
+                        <div class="camera-box">
+                            <i class="fa fa-camera"></i>
+                            <input type="file" class="d-none" id="profile-image" (change)="selectFile($event)" accept="image/jpeg, image/jpg, image/png">
+                        </div>
+                    </label>
+                </div>
+                <div class="profile-input-section">
+                    <div class="input-style  mb-2">
+                        <label class="d-block">Full Name<span class="text-danger">*</span></label>
+                        <input type="email" class="ctm-input" placeholder="Addy brown" [(ngModel)]="updateUserObj.name">
+                    </div>
+                    <div class="input-style  mb-2">
+                        <label class="d-block">Email<span class="text-danger">*</span></label>
+                        <input type="email" class="ctm-input" placeholder="Addybrown@humpheryandstretton.com" [(ngModel)]="updateUserObj.email">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end">
+                        <a href="javascript:void(0)" class="login-p" (click)="updateUser()">Save</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="pro-right-box-main">
+            <h1 class="change-pass">CHANGE PASSWORD</h1>
+            <div class="profile-right-box">
+                <div class="input-style mb-2">
+                    <label class="d-block">Old Password<span class="text-danger">*</span></label>
+                    <div class="type-pass">
+                        <input type="password" class="ctm-input" placeholder="Password" [(ngModel)]="passwordObj.old_password">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/icon-feather-eye.svg" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-style mb-2">
+                    <label class="d-block">New Password<span class="text-danger">*</span></label>
+                    <div class="type-pass">
+                        <input type="password" class="ctm-input" placeholder="New Password" [(ngModel)]="passwordObj.password">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/icon-feather-eye.svg" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-style mb-2">
+                    <label class="d-block">Confirm Password<span class="text-danger">*</span></label>
+                    <div class="type-pass">
+                        <input type="password" class="ctm-input" placeholder="Confirm Password" [(ngModel)]="passwordObj.password_confirmation">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/icon-feather-eye.svg" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <a href="javascript:void(0)" class="login-p" (click)="updatePassword()">Save</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

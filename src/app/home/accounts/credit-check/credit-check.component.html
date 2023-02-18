@@ -1,0 +1,104 @@
+ <div class="dashboard-main">
+     <div class="dashboard-content ">
+         <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+             <ul class="breadcrumb">
+                 <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ACCOUNTS</a></li>
+                 <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">CREDIT CHECK</a></li>
+                 <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+             </ul>
+
+         </div>
+         <div class="roles-main delivery-list-table">
+             <div class="d-flex align-items-center justify-content-between delivery-list-main fixed-cost-bar">
+
+                 <div class="d-flex for-media-setts justify-content-between">
+                     <div class="form-group sear-bar-roles position-relative mb-0">
+                         <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" [(ngModel)]="searchParams.search" (input)="search()">
+                         <i-feather class="search-ctm" name="search"></i-feather>
+                     </div>
+                 </div>
+                 <a class="secondary-sup" href="javascript:void(0)" (click)="creditCheck()" *ngIf="checked">
+                     Credit Check
+                 </a>
+             </div>
+             <div class="tab-table">
+                 <div class="tables-roles-main tables-users-main table-responsive">
+                     <table class="table">
+                         <thead class="thead-ctm">
+                             <tr>
+                                 <th>
+                                     <div class="remember-me">
+                                         <label class="custom-check custom-check-r">
+                                             <input type="checkbox" [checked]="checkAll" [(ngModel)]="checkAll" (change)="selectAll()">
+                                             <span class="checkmark"></span>
+                                         </label>
+                                     </div>
+
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('due_date')">
+                                     <p class="inner-cell">W/C <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'due_date' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'due_date' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('work_number')">
+                                     <p class="inner-cell">Work# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                     <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+
+                                 <th class="cursor-pointer" (click)="sortData('products.name')">
+                                     <p class="inner-cell">Product <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+
+                                 <th class="cursor-pointer" (click)="sortData('status')">
+                                     <p class="inner-cell">Status <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'status' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'status' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('progress')">
+                                     <p class="inner-cell">Progress <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+
+                             </tr>
+                         </thead>
+                         <tbody class="t-body-ctm">
+                             <tr class="active-row" *ngFor="let credit of creditChecks;let i = index" [ngClass]="{'order-withdrawn': credit.on_hold || credit.status == 'Withdrawn','order-to-factory':credit.status == 'To Factory'}">
+                                 <td>
+                                     <div class="remember-me">
+                                         <label class="custom-check custom-check-r">
+                                             <input type="checkbox" [(ngModel)]="credit.checked" (change)="selectOptions()">
+                                             <span class="checkmark"></span>
+                                         </label>
+                                     </div>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ credit.week_number }}</p>
+                                 </td>
+
+
+                                 <td>
+                                     <p class="inner-cell">{{ credit.work_number }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ credit.customer.name }}</p>
+                                 </td>
+
+                                 <td>
+                                     <p class="inner-cell">{{ credit.product.name }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ credit.on_hold ? 'On Hold' : credit.status }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ credit.progress }}%</p>
+                                 </td>
+                             </tr>
+
+                         </tbody>
+                     </table>
+
+                 </div>
+                 <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+             </div>
+
+         </div>
+     </div>
+
+ </div>

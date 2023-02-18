@@ -1,0 +1,55 @@
+<div class="reset-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="img-logo mx-0">
+                    <a href="index.html">
+                        <img class="img-fluid" src="assets/img/logo.png" alt="logo">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row" *ngIf="step == 0">
+            <div class="col-md-8 mx-auto">
+                <div class="box-reset text-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1 class="reset-heading" *ngIf="isLoading && tokenVerified">Verifying, Please Wait</h1>
+                                <h1 class="reset-heading" *ngIf="!isLoading && !tokenVerified">Error verifying request</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="step ==1">
+            <div class="col-md-8 mx-auto">
+                <div class="box-reset">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1 class="reset-heading">Update Password</h1>
+                                <p class="reset-para mb-30">Please enter your new password</p>
+                                <div class="input-style mb-2">
+                                    <label class="d-block">New Password<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input" placeholder="New Password" [(ngModel)]="updatePasswordObj.password" name="password">
+                                </div>
+                                <div class="input-style mb-2">
+                                    <label class="d-block">Confirm Password<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input" placeholder="Confirm Password" [(ngModel)]="updatePasswordObj.password_confirmation" name="password_confirmation" (input)="passwordMismatch()">
+                                    <span class="text text-danger" *ngIf="invalidConfirmPassword">Password does not match</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-around mt-3">
+                                    <a href="javascript:void(0)" class="login-p" (click)="skipPassword()">Skip</a>
+                                    <a href="javascript:void(0)" class="login-p" [ngClass]="{'disabled': updatePasswordObj.password.length == 0 || updatePasswordObj.password_confirmation.length == 0 || updatePasswordObj.password != updatePasswordObj.password_confirmation}" (click)="updatePassword()">Update Password</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

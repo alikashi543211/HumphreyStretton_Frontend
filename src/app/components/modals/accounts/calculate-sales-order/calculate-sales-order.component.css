@@ -1,0 +1,28 @@
+
+
+.add-modal {
+    padding-left: 20px;
+    overflow-y: auto;
+    overflow-x: clip;
+    max-height: 65vh;
+    padding-right: 20px !important;
+}
+
+.cross-icon {
+    background-color: #DC0100;
+    color: white;
+    border-radius: 7px;
+}
+
+.plus-rotate {
+    stroke-width: 1px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+@media (max-width: 1370px) {
+    .add-modal {
+        max-height: 80vh;
+    }
+}

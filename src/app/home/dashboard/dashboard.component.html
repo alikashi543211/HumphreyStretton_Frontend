@@ -1,0 +1,269 @@
+<div class="dashboard-main mr-30">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">DASHBOARD</a></li>
+                <li class=" breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="search-inputs d-flex">
+                <div class="input-style mr-10">
+
+                    <div class="type-pass">
+                        <input type="text" id="start_date" class="ctm-input" placeholder="Select Month" name="start_date" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'MMMM, YYYY', minMode:'month',containerClass:'theme-red'}" (bsValueChange)="monthValue($event)" [bsValue]="statsMonth">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <i-feather class="calender" name="calendar"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Orders In Progress</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <p class="price ">{{ stats?.sales_total.in_progress | currency:'GBP':'symbol'}}</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Total Order Delivered</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <p class="price orange">{{ stats?.sales_total.delivered | currency:'GBP':'symbol'}}</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Predicted Workload</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <p class="price purple">{{ stats?.sales_total.predicted_workload | currency:'GBP':'symbol'}}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Projected Profit</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <p class="price navyblue-color">{{ stats?.sales_total.projected_profit | currency:'GBP':'symbol'}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-5 col-lg-5 col-md-12 box-1-card">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Sales</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="chart-container" style="position: relative; width:100%;">
+                    <canvas #salesChart></canvas>
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-12 box-2-card">
+            <div class="card-dash card-dash-board">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Sales</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <a class="door-hover" href="javascript:void(0)">
+                            <div class="card-door">
+                                <h4 class="door-heading">Doors</h4>
+                                <p class="door-text">{{ stats?.sales_summary.door | currency:'GBP':'symbol'}}</p>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <a class="door-hover" href="javascript:void(0)">
+                            <div class="card-door card-door-green">
+                                <h4 class="door-heading">Frames</h4>
+                                <p class="door-text">{{ stats?.sales_summary.frame | currency:'GBP':'symbol'}}</p>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <a class="door-hover" href="javascript:void(0)">
+                            <div class="card-door card-door-blue">
+                                <h4 class="door-heading">Other Items</h4>
+                                <p class="door-text">{{ stats?.sales_summary.other | currency:'GBP':'symbol'}}</p>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 box-3-card">
+            <a class="hover-after" href="javascript:void(0)">
+                <div class="card-dash card-top-purple">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <h3 class="carder-heading">Top Grocing Customer</h3>
+                            <p class="p-status">Total sales</p>
+                        </div>
+                        <div class="calender-logo">
+                        </div>
+
+                    </div>
+                    <div class="card-door-1">
+                        <h4 class="door-heading">{{ stats ? stats?.sales_top_grocing.customer.customer_name : 'N/A' }}</h4>
+                        <p class="door-text-pri">{{ stats ? (stats?.sales_top_grocing.customer.customer_total | currency:'GBP':'symbol') : 'N/A'}}</p>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-md-12">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Status</h3>
+                        <p class="p-status">Total sales</p>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+                </div>
+                <div class="chart-details d-flex align-items-center justify-content-around">
+                    <ul *ngIf="chartLabels" class="chart-labels">
+                        <li *ngFor="let l of chartLabels"><span class="status-color" [style.background]="l.color"></span> {{ l.label }} {{ l.value | currency:'GBP':'symbol' }}</li>
+                    </ul>
+                    <div class="chart-container position-relative d-flex justify-content-center align-items-center" style="height: 350px;">
+                        <canvas #statusChart></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-5 col-md-12">
+            <div class="card-dash">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h3 class="carder-heading">Top Sales Person</h3>
+
+                        <ul class="list-view ">
+                            <li class="to-from">Month:<span>{{ statsMonth | date:'MMM, YYYY' }}</span></li>
+                        </ul>
+                    </div>
+                    <div class="calender-logo">
+                    </div>
+
+                </div>
+                <div class="bar-chart-ctm">
+                    <div class="bar-main bar-main-2">
+
+                        <a class="bar-hover" href="javascript:void(0)">
+                            <div class="on-hover-label">
+                                <p>{{ stats?.sales_top_person[1]?.total  | currency:'GBP':'symbol' }}</p>
+                            </div>
+                            <div class="bar-img bar-img-gray">
+                                <img src="assets/img/bar-img.png" class="bar-img-1 img-fluid" alt="bar-img">
+                                <div class="medal">
+                                    <img class="img-fluid" src="assets/img/medal.svg" alt="medal">
+                                </div>
+
+                            </div>
+                            <div class="bar-long"></div>
+                            <p class="name-bar">{{ stats?.sales_top_person[1]?.name }}</p>
+                            <p class="sales-p">{{ stats?.sales_top_person[1]?.role }}</p>
+                        </a>
+                    </div>
+                    <div class="bar-main">
+
+                        <a class="bar-hover" href="javascript:void(0)">
+                            <div class="on-hover-label">
+                                <p>{{ stats?.sales_top_person[0]?.total | currency:'GBP':'symbol' }}</p>
+                            </div>
+                            <div class="bar-img">
+                                <img src="assets/img/bar-img.png" class="bar-img-1 img-fluid" alt="bar-img">
+                                <div class="medal">
+                                    <img class="img-fluid" src="assets/img/medal.svg" alt="medal">
+                                </div>
+
+                            </div>
+                            <div class="bar-long"></div>
+                            <p class="name-bar">{{ stats?.sales_top_person[0]?.name }}</p>
+                            <p class="sales-p">{{ stats?.sales_top_person[0]?.role }}</p>
+                        </a>
+                    </div>
+
+                    <div class="bar-main bar-main-3">
+
+                        <a class="bar-hover" href="javascript:void(0)">
+                            <div class="on-hover-label">
+                                <p>{{ stats?.sales_top_person[2]?.total | currency:'GBP':'symbol' }}</p>
+                            </div>
+                            <div class="bar-img bar-img-brown">
+                                <img src="assets/img/bar-img.png" class="bar-img-1 img-fluid" alt="bar-img">
+                                <div class="medal">
+                                    <img class="img-fluid" src="assets/img/medal.svg" alt="medal">
+                                </div>
+
+                            </div>
+                            <div class="bar-long"></div>
+                            <p class="name-bar">{{ stats?.sales_top_person[2]?.name }}</p>
+                            <p class="sales-p">{{ stats?.sales_top_person[2]?.role }}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

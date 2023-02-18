@@ -1,0 +1,20 @@
+.switch-inline-main {
+    flex-wrap: wrap;
+}
+
+.sett-switches {
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 85%;
+    width: 100%;
+}
+
+.list-card-icons {
+    margin-left: 1.6rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-inputs .input-style .ctm-input {
+    width: 17rem;
+}

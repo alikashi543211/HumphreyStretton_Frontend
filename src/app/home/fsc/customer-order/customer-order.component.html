@@ -1,0 +1,83 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">FSC</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:void(0)">CUSTOMER ORDERS</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="d-flex">
+                <div class="dropdown">
+                    <button class="credit-check dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i-feather class="download" name="download"></i-feather> Download Data
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="roles-main delivery-list-table">
+            <div class="d-flex align-items-center justify-content-between delivery-list-main">
+                <div class="d-flex for-media-setts">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchOrder('search')" [(ngModel)]="searchParams.search">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-table">
+                <div class="tables-roles-main tables-users-main table-responsive">
+                    <table class="table">
+                        <thead class="thead-ctm">
+                            <tr>
+                                <th class="cursor-pointer" (click)="sortData('work_number')">
+                                    <p class="inner-cell">W/O <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                    <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('contract')">
+                                    <p class="inner-cell">Contract <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('invoice_no')">
+                                    <p class="inner-cell">Invoice No# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th>
+                                    <p class="inner-cell">Delivery Note</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="t-body-ctm">
+                            <tr class="active-row" *ngFor="let fsc of fscList;let i = index">
+                                <td>{{ fsc.work_number }}</td>
+                                <td>{{ fsc.customer.name }}</td>
+
+                                <td>{{ fsc.contract }}</td>
+                                <td>{{ fsc.invoice_no ? fsc.invoice_no : '--' }}</td>
+                                <td>
+                                    <a class="icon-anchor-list red" *ngIf="fsc.delivery_notes_count > 1" [routerLink]="['/rod/delivery-notes', fsc.id]">Multiple</a>
+                                    <a class="icon-anchor-list" *ngIf="fsc.delivery_notes_count == 0">
+                                        - <i-feather class="icon-width" name="edit-2" [routerLink]="['/rod/delivery-notes', fsc.id]"></i-feather>
+                                    </a>
+                                    <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['/rod/delivery-notes', fsc.id]" *ngIf="fsc.delivery_notes_count == 1">
+                                        {{ fsc.delivery_notes[0]?.ticket_no }} <i-feather class="icon-width" name="edit-2"></i-feather>
+                                    </a>
+                                </td>
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- Pagination -->
+                <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,14 @@
+.remove-product {
+    color: white;
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.search-position-modal {
+    position: absolute;
+    /* top: 40% !important; */
+    /* transform: translateY(-50%); */
+    right: 1.6rem !important;
+}

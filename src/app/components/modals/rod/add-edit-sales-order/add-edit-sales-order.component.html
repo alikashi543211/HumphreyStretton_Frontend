@@ -1,0 +1,208 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title" *ngIf="type == 'add'">ADD SALES ORDER</h4>
+    <h4 class="modal-title" *ngIf="type == 'edit'">UPDATE SALES ORDER</h4>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+    <div class="row" *ngIf="type == 'add'">
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Product<span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" placeholder="Change Action" (change)="selectProduct($event)">
+                            <option value="select" selected>Select Product</option>
+                            <option [value]="i" *ngFor="let product of products;let i = index">{{ product.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <span class="fiels-ctm" *ngFor="let product of selectedProducts;let i = index">
+                        {{ product.name }} <i-feather class="remove-product" name="X" (click)="removeProduct(i)"></i-feather>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="customerInputOut()">
+                        <label class="d-block">Customers<span class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Customer" (input)="searchCustomer($event)" (focus)="customerInput = true" [(ngModel)]="selectedCustomer">
+                        <div class="custom-dropdown-list" *ngIf="customerInput">
+                            <ul>
+                                <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                                    {{ customer.name }}
+                                </li>
+                                <li (click)="selectCustomer('new')">Add Customer</li>
+                            </ul>
+                        </div>
+                        <i-feather class="input-icon" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" *ngFor="let product of selectedProducts">
+            <div class="input-style mb-2">
+                <label class="d-block"> <span class="red-label">[W/O]</span>{{ product.name }}<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Enter quantity" [(ngModel)]="product.quantity">
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Contract<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Contract Name" [(ngModel)]="workOrder.contract" name="contract">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Customer Order#<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Customer Order#" [(ngModel)]="workOrder.order_number" name="order_number">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Location<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Location" [(ngModel)]="workOrder.location" name="location">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Schedule Ref</label>
+                <input type="text" class="ctm-input type-input" placeholder="Schedule Ref" [(ngModel)]="workOrder.schedule_ref" name="schedule_ref">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center  check-box-rod-modal justify-content-between">
+                <h3 class="fsc-text">FSC:</h3>
+                <div class="remember-me">
+                    <label class="custom-check custom-check-r">
+                        <input type="checkbox" checked="checked" [(ngModel)]="workOrder.fsc">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'edit'">
+
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Work Order#<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="A01" readonly [(ngModel)]="updateOrder.work_number" name="work_number">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="customerInputOut()">
+                        <label class="d-block">Customers<span class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Customer" (input)="searchCustomer($event)" (focus)="customerInput = true" [(ngModel)]="selectedCustomer">
+                        <div class="custom-dropdown-list" *ngIf="customerInput">
+                            <ul>
+                                <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                                    {{ customer.name }}
+                                </li>
+                                <li (click)="selectCustomer('new')">Add Customer</li>
+                            </ul>
+                        </div>
+                        <i-feather class="input-icon" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-6">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Customers<span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" placeholder="Select Customer" (change)="selectCustomer($event)" [(ngModel)]="updateOrder.customer_id">
+                            <option [value]="customer.id" *ngFor="let customer of customers" [selected]="customer.id == order.customer_id">{{ customer.name }}</option>
+                            <option value="new">Add Customer</option>
+                        </select>
+                        <div class="search-position-modal">
+                            <i-feather class="search-icon-bar" name="search"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Product<span class="text-danger">*</span></label>
+                <select class="ctm-input bg-white" placeholder="Select Customer" [(ngModel)]="updateOrder.product_id">
+                    <option [value]=" product.id" *ngFor="let product of products">{{ product.name }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Quantity<span class="text-danger">*</span></label>
+                <input type="number" class="ctm-input type-input" placeholder="100" [(ngModel)]="updateOrder.quantity">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Customer Order Number<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Wan043" [(ngModel)]="updateOrder.order_number">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Contract<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Charing Cross Hospital" [(ngModel)]="updateOrder.contract">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Due Date<span class="text-danger">*</span></label>
+                <div class="type-pass">
+                    <input type="text" class="ctm-input" placeholder="23/10/2021" [(ngModel)]="currentDate" (bsValueChange)="dateChanged($event)" [(bsValue)]="currentDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Invoice<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="41109" [(ngModel)]="updateOrder.invoice_no">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Schedule Ref<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Gd12-19" [(ngModel)]="updateOrder.schedule_ref">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center  check-box-rod-modal justify-content-between">
+                <h3 class="fsc-text">FSC:</h3>
+                <div class="remember-me">
+                    <label class="custom-check custom-check-r">
+                        <input type="checkbox" [checked]="order.fsc" [(ngModel)]="updateOrder.fsc">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="addSalesOrder()" *ngIf="type == 'add'">Add</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="updateSalesOrder()" *ngIf="type == 'edit'">Update</a>
+    </div>
+</div>

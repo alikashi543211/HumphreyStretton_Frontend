@@ -1,0 +1,47 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ADMINISTRATION</a></li>
+                <li class=" breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ROLES</a></li>
+            </ul>
+            <a class="secondary-sup" (click)="addRole()" href="javascript:void(0)" *ngIf="_auth.checkPermissions('administration','write')">
+                <i-feather class="plus" name="plus"></i-feather> New Role
+            </a>
+
+        </div>
+        <div class="roles-main">
+            <div class="form-group sear-bar-roles position-relative mb-0">
+                <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchRole()" [(ngModel)]="search">
+                <i-feather class="search-ctm" name="search"></i-feather>
+            </div>
+            <div class="tables-roles-main table-responsive">
+                <table class="table">
+                    <thead class="thead-ctm">
+                        <tr>
+                            <th>#</th>
+                            <th>Role name</th>
+                            <th *ngIf="_auth.checkPermissions('administration','write')">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="t-body-ctm">
+                        <tr *ngFor="let role of roles;let i = index">
+                            <td>{{ role.id }}</td>
+                            <td>{{ role.title }}</td>
+                            <td *ngIf="_auth.checkPermissions('administration','write')">
+                                <div class="select-box">
+                                    <div class="input-style form-group">
+                                        <i-feather name="edit-3" (click)="roleAction(role,'edit',i)" class="mr-2"></i-feather>
+                                        <i-feather name="trash" (click)="roleAction(role,'delete',i)"></i-feather>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>

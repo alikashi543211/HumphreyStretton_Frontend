@@ -1,0 +1,144 @@
+<!-- Modal Header -->
+<div class="modal-header ">
+    <h4 class="modal-title">TIMELINE</h4>
+    <i class="fa fa-times cursor-pointer" (click)="close()" style="font-size:20px; margin-top: 5px;"></i>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body " *ngIf="showPage">
+    <div class="timeline-table">
+        <div class="modal-table table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Work#</th>
+                        <th>Customer</th>
+                        <th>Order#</th>
+                        <th>Product</th>
+                        <th>Progress</th>
+                        <th>Delivery Note</th>
+                        <th>Production Schedule</th>
+                        <th>Quotations</th>
+                        <th>Other Attachments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ rod.work_number }}</td>
+                        <td>{{ rod.customer.name }}</td>
+                        <td>{{ rod.order_number }}</td>
+                        <td>{{ rod.product.name }}</td>
+                        <td>{{ rod.progress }}</td>
+                        <td>
+                            <a class="view-anchor view-anchor-red" *ngIf="rod.delivery_notes_count > 1" (click)="viewDeliveryNotes()">Multiple</a>
+                            <a class="view-anchor view-anchor-red" href="javascript:void(0)" (click)="viewDeliveryNotes()" *ngIf="rod.delivery_notes_count == 1">{{ rod.delivery_notes[0]?.ticket_no }}</a>
+                        </td>
+                        <td>
+                            <a *ngIf="rod.attachments.length > 1" class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="viewProductionSchedule()">
+                                Multiple
+                            </a>
+                            <a *ngIf="rod.attachments.length == 1" class="view-anchor view-anchor-red mr-2" target="_blank" [href]="rod.attachments[0].location">
+                                View
+                            </a>
+                            <a class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="deleteAttachment(rod.attachments[0])" *ngIf="rod.attachments.length == 1 && (_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write'))">Delete</a>
+                            <a class="view-anchor view-anchor-red" (click)="addProductionSchedule()" *ngIf="_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write')">
+                                Add
+                            </a>
+                        </td>
+                        <td>
+                            <a *ngIf="rod.quotation_attachments.length > 1" class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="viewProductionSchedule(2)">
+                                Multiple
+                            </a>
+                            <a *ngIf="rod.quotation_attachments.length == 1" class="view-anchor view-anchor-red mr-2" target="_blank" [href]="rod.quotation_attachments[0].location">
+                                View
+                            </a>
+                            <a class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="deleteAttachment(rod.quotation_attachments[0],'quotation_attachments')" *ngIf="rod.quotation_attachments.length == 1 && (_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write'))">Delete</a>
+                            <a class="view-anchor view-anchor-red" (click)="addProductionSchedule(2)" *ngIf="_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write')">
+                                Add
+                            </a>
+                        </td>
+                        <td>
+                            <a *ngIf="rod.other_attachments.length > 1" class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="viewProductionSchedule(3)">
+                                Multiple
+                            </a>
+                            <a *ngIf="rod.other_attachments.length == 1" class="view-anchor view-anchor-red mr-2" target="_blank" [href]="rod.other_attachments[0].location">
+                                View
+                            </a>
+                            <a class="view-anchor view-anchor-red mr-2" href="javascript:void(0)" (click)="deleteAttachment(rod.other_attachments[0],'other_attachments')" *ngIf="rod.other_attachments.length == 1 && (_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write'))">Delete</a>
+                            <a class="view-anchor view-anchor-red" (click)="addProductionSchedule(3)" *ngIf="_auth.checkPermissions('rod','write') || _auth.checkPermissions('delivery_list','write')">
+                                Add
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="timeline-section d-flex justify-content-between">
+        <div class="timeline-card-main" [ngClass]="{'show-job-note': jobDetail != null}">
+            <ul class="cars-time-list">
+                <div *ngFor="let note of jobNotes; let i = index">
+                    <li class="card-timeline position-relative" *ngIf="i % 2 == 0">
+                        <div class="timeline-counter">{{ i+1 }}</div>
+                        <div class="timeline-counter-scroll">
+                            <ul class="card-ul-timeline">
+                                <li class="timeline-name-heading">Employee Name</li>
+                                <li class="timeline-name">{{ note.user.name }}</li>
+                            </ul>
+                            <ul class="card-ul-timeline">
+                                <li class="timeline-name-heading">Status</li>
+                                <li class="timeline-name">{{ note.title }}</li>
+                            </ul>
+                            <ul class="card-ul-timeline" [ngClass]="{'invisible': !note.description}">
+                                <li class="timeline-name-heading">Job Note</li>
+                                <li class="timeline-name">
+                                    <div [innerHtml]="note.description">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <p class="date-center">{{ note.created_at | date: 'hh:mm a | dd MMMM, yyyy' }}</p>
+                    </li>
+                </div>
+            </ul>
+            <div class="bottom-card-list">
+                <ul class="cars-time-list">
+                    <div *ngFor="let note of jobNotes; let i = index">
+                        <li class="card-timeline position-relative" *ngIf="i % 2 != 0">
+                            <div class="timeline-counter">{{ i+1 }}</div>
+                            <div class="timeline-counter-scroll">
+                                <ul class="card-ul-timeline">
+                                    <li class="timeline-name-heading">Employee Name</li>
+                                    <li class="timeline-name">{{ note.user.name }}</li>
+                                </ul>
+                                <ul class="card-ul-timeline">
+                                    <li class="timeline-name-heading">Status</li>
+                                    <li class="timeline-name">{{ note.title }}</li>
+                                </ul>
+                                <ul class="card-ul-timeline" [ngClass]="{'invisible': !note.description}">
+                                    <li class="timeline-name-heading">Job Note</li>
+                                    <li class="timeline-name">
+                                        <div [innerHtml]="note.description">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="date-center">{{ note.created_at | date: 'hh:mm a | dd MMMM, yyyy' }}</p>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="job-details-section" *ngIf="jobDetail">
+            <span class="close-job-details" (click)="showJobNoteDetails(null)">X</span>
+            <h4 class="title">Job Note <i class="bi bi-arrow-right"></i></h4>
+            <div class="job-note-description">
+                <div [innerHtml]="jobDetail.description">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

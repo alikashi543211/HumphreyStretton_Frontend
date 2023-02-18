@@ -1,0 +1,649 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item" *ngIf="!currentDeliveryNote"><a class="breadcrumb-link " href="javascript:void(0)">NEW DELIVERY TICKET</a></li>
+                <li class="breadcrumb-item" *ngIf="currentDeliveryNote"><a class="breadcrumb-link " href="javascript:void(0)">UPDATE DELIVERY TICKET ({{ currentDeliveryNote.ticket_no }})</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="d-flex ">
+                <div class="dispatch-table-buttons">
+                    <button class="credit-check mr-1" printSectionId="table-pdf" ngxPrint *ngIf="currentDeliveryNote">Print</button>
+                    <a class="disable-btn-dispatch" href="javascript:void(0)" (click)="redirectBack()">
+                        Discard</a>
+                    <a class="credit-check mr-1" href="javascript:void(0)" *ngIf="!currentDeliveryNote && _auth.checkPermissions('rod','write')" (click)="addDeliveryNote()">
+                        Save</a>
+                    <a class="credit-check mr-1" href="javascript:void(0)" *ngIf="currentDeliveryNote && _auth.checkPermissions('rod','write')" (click)="updateDeliveryNote()">
+                        Update</a>
+                    <a class="secondary-sup" href="javascript:void(0)" (click)="resetFormValue()" *ngIf="currentDeliveryNote && _auth.checkPermissions('rod','write')">
+                        New Dispatch Order</a>
+                </div>
+            </div>
+        </div>
+        <div class=" Dispatch-mainbox">
+            <div class="d-flex dispatch-wrap-for-respo">
+                <div class="left-order-detail">
+                    <h1 class="recent-heading">Recent Despatch Order List:</h1>
+                    <ul class="ticket-no">
+                        <li class="ticket-date">Ticket Number</li>
+                        <li class="ticket-date">Date</li>
+                    </ul>
+                    <div class="dispatch-list" *ngFor="let note of deliveryNotes">
+                        <ul class="ticket-no-detail">
+                            <li class="ticket-date-detail" [ngClass]="{active: note.id == currentDeliveryNote?.id }">{{ note.ticket_no }}</li>
+                            <li class="ticket-d-detail">{{ note.dispatch_date | date:'dd/MM/yyyy' }}</li>
+                            <li class="ticket-d-detail" [ngClass]="{active: note.id == currentDeliveryNote?.id}">
+                                <a class="view-dis" href="javascript:void(0)" (click)="currentDeliveryNote = deliveryOrder = note;selectDate()">View</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="width: 100%;display:none;" id="table-pdf" *ngIf="currentDeliveryNote">
+                    <table style="width: 50%; float: left;">
+                        <tr style="width: 100%; display: block;">
+                            <th>
+                                <img style="height: 24px;" src="assets/img/pdf-logo.jpg" alt="logo">
+                            </th>
+                            <th>
+                                <img style="height: 24px;" src="assets/img/pdf-logo-2.jpg" alt="logo">
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p style="color: #666;font-weight: 400;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">Flush Doors, Doorsets & Joinery Manufacturers </p>
+                                <p style="color: #000;font-weight: 600;font-size: 14px;font-family: 'Open Sans', sans-serif !important; margin: 0;"><a style="color: #000; text-decoration: none;" href="#">www.humphreystretton.com</a> </p>
+                                <p style="font-weight: 600;font-size: 12px;font-family: 'Open Sans', sans-serif !important; margin: 0;"><a style=" text-decoration: none;" href="#">enquries@humphreystretton.com</a> </p>
+                                <p style="color: #000;font-weight: 500;font-size: 10px;font-family: 'Open Sans', sans-serif !important; margin: 0;"><a style="color: #000; text-decoration: none;" href="#">01992 462965</a> </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 50%; float: right; text-align: end;">
+                        <tr style="width: 100%; text-align: end; float: right;">
+                            <th style="width: 100%;float: right;">
+                                <div style="display: inline-block;float: right;">
+                                    <img style="width: 30px; height: 30px;" src="assets/img/pdf-youtube.png" alt="logo">
+                                    <img style="width: 30px; height: 30px;" src="assets/img/pdf-linkedin.png" alt="logo">
+                                    <img style="width: 30px; height: 30px;" src="assets/img/pdf-facebook.jpg" alt="logo">
+
+
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p style="color: #000;font-weight: 500;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">Humphrey & Stretton plc </p>
+                                <p style="color: #000;font-weight: 500;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">Pindar Road Industrial Estate </p>
+                                <p style="color: #000;font-weight: 500;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">Hoddesdon </p>
+                                <p style="color: #000;font-weight: 500;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">Hertfordshire </p>
+                                <p style="color: #000;font-weight: 500;font-size: 12px;font-family: 'Open Sans', sans-serif !important;margin: 0;">EN11 0EU </p>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 100%; border-collapse: collapse;border: 2px solid black;">
+                        <tr>
+                            <th style="padding: 5px 10px;border: 2px solid black;" colspan="6">
+                                <div style="width: 100%; display: inline-block;white-space: nowrap;text-align: left;">
+                                    <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Invoice to: <span style="font-weight: 400;">{{ workOrder?.customer.name }}</span></label>
+                                </div>
+                            </th>
+                            <th style="padding: 5px 10px;border: 2px solid black;text-align: left;" colspan="4">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Ticket No: <span style="font-weight: 400;">{{ deliveryOrder.ticket_no }}</span></label>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px 10px;border: 2px solid black;" colspan="6">
+                                <!-- <textarea style="font-size: 13px;font-weight: 400;color: #000;width: 100%;height: auto;overflow-y: auto;border: none;overflow-x: unset;white-space: pre-line;resize: unset;outline: none;font-family: 'Open Sans', sans-serif !important;" rows="6" [(ngModel)]="deliveryOrder.invoice_to"></textarea> -->
+                                <table class="table-inner">
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_name }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_address_1_street }}</span>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_address_2_town }}</span>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_address_3_city }}</span>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_address_4_country }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <span style="font-weight: 400; font-size: 12px;">{{ deliveryOrder.del_address_5_postal_code }}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="padding: 0;border: 2px solid black;" colspan="4">
+                                <table style="width: 100%;border-collapse: collapse;">
+                                    <tr>
+                                        <td style="border-top: none;border-left: none;border-right: none;padding: 5px 10px;border-bottom: 2px solid black;">
+                                            <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Despatch Date:<span style="font-weight: 400;">{{ deliveryOrder.dispatch_date | date: 'dd/MM/yyyy' }}</span></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: none;border-left: none;border-right: none;padding: 5px 10px;border-bottom: 2px solid black;">
+                                            <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Customer Order No.</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: none;border-left: none;border-right: none;padding: 5px 10px;border-bottom: 2px solid black;">
+                                            <input style="font-size: 13px;font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;outline: none;font-family: 'Open Sans', sans-serif !important;" type="text" [(ngModel)]="deliveryOrder.order_number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: none;border-left: none;border-right: none;padding: 5px 10px;">
+                                            <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">
+                                                <span>W/O:</span>
+                                                <span style="padding: 3px 6px;border-radius: 15px;background: #DC0100;color: #fff;margin-right: 4px;display: inline-block;text-align: center;box-sizing: border-box;font-family: 'Open Sans', sans-serif !important;" *ngFor="let order of deliveryOrder.work_orders; let i = index">
+                                                    <span style="color: #fff;line-height: 14px; font-size:12px">{{ order.work_number }}</span>
+                                                </span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px 10px;border: 2px solid black;" colspan="10">
+                                <p style="font-size: 9px;font-weight: 400;color: #000;text-align: center;margin: 0;font-family: 'Open Sans', sans-serif !important;">Only products identified as such on this Delivery note are FSC certified</p>
+                                <div style="width: 60%;margin: 5px auto;display: block;text-align: center;vertical-align: middle;">
+                                    <p style="font-size: 13px;font-weight: 700;color: #000;display: inline-block;text-align: center;vertical-align: middle;float: left;margin: 0 !important;margin-bottom: 0px !important;font-family: 'Open Sans', sans-serif !important;">Products FSC ® CU-COC-806432</p>
+                                    <div style="float: right;width: 20px;height: 20px;text-align: center;border: 2px solid #DC0100;border-radius: 2px;">
+                                        <span style="color: #DC0100;display: block;font-size: 16px;margin-top: 0px;" *ngIf="deliveryOrder.fsc">&#10003;</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Flush Doors</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Frames</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Stops</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Architraves</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Timber <br> Sections</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Hinges</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Glass Pcs</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Glazing <br> Beads</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">FD60 <br> Hinge <br> Packers</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.flush_door"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.frames"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.stops"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.architraves"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.timber_sections"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.hinges"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.glass_pcs"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.glazing_beads"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.hinge_packers"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 10px;font-weight: 700;color: #000;display: block;text-align: center;margin: 10px 0;font-family: 'Open Sans', sans-serif !important;">
+                        Fire and Acoustic Seals in 2.1m Lengths
+                    </p>
+                    <table style="width: 100%;border-collapse: collapse;width: 100%;border-collapse: collapse;">
+                        <tr>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">10 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">10 x 4<br>Intu<br>Smoke</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">15 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">15 x 4<br>Intu<br>Smoke </label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">20 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">20 x 4<br>Intu<br> Smoke</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Drop<br>Down<br>Seals</label>
+                            </td>
+                            <td colspan="1" style="padding: 5px 10px;border: 2px solid black;">
+                                <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;">Weather<br>Seals</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_10_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_10_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_15_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_15_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_20_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_20_4"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.drop_down_seals"></textarea>
+                            </td>
+                            <td colspan="1" style="padding: 1px;border: 2px solid black;">
+                                <textarea style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.weather_seals"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="padding: 5px 0; width: 100%;"></div>
+                    <table style="width: 100%;border-collapse: collapse;width: 100%;border-collapse: collapse;">
+                        <tr>
+                            <th style="padding: 3px 10px;border: 2px solid black; text-align: left;" colspan="5"><label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important; text-align: left;">Site Contact: <span style="font-weight: 400;">{{ deliveryOrder.site_contact }}</span></label></th>
+                            <th style="padding: 3px 10px;border: 2px solid black; text-align: left;" colspan="5"><label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important; text-align: left;">Site Number: <span style="font-weight: 400;">{{ deliveryOrder.site_number }}</span></label></th>
+                        </tr>
+                    </table>
+                    <div style="padding: 5px 0; width: 100%;"></div>
+                    <table style="width: 100%;border-collapse: collapse;width: 100%;border-collapse: collapse;">
+                        <tr>
+                            <th style="padding: 3px 10px;border: 2px solid black;" colspan="10"><label style="    font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;text-align: start;display: block;font-family: 'Open Sans', sans-serif !important;">Other / Notes</label></th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px 10px;border: 2px solid black;" colspan="10">
+                                <textarea style="font-size: 12px;font-weight: 400;color: #000;width: 100%;overflow-y: auto;border: none;overflow-x: unset;white-space: pre-line;resize: unset;outline: none;font-family: 'Open Sans', sans-serif !important;" [(ngModel)]="deliveryOrder.other_notes" rows="12" name="other_notes"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 10px;font-weight: 700;color: #000;display: block;text-align: center;margin: 10px 0;font-family: 'Open Sans', sans-serif !important;">
+                        STATING UNEXAMINED, UNCHECKED OR SIMILAR WORDS ARE NOT ACCEPTABLE
+                    </p>
+                    <table style="width: 100%;border-collapse: collapse;width: 100%;border-collapse: collapse;">
+                        <tr>
+                            <th style="padding: 3px 10px;border: 2px solid black; height: 30px; text-align: center;" colspan="10"><label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;text-align: center;display: block;font-family: 'Open Sans', sans-serif !important;">Received by</label></th>
+                            <th style="padding: 3px 10px;border: 2px solid black;height: 30px;text-align: center;" colspan="10"><label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;text-align: center;display: block;font-family: 'Open Sans', sans-serif !important;">Load Checked By</label></th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px 10px;border: 2px solid black; height: 100px;width: 50%;" colspan="10">
+                                <div style="width: 100%; display: inline-block;white-space: nowrap;margin-bottom: 25px;">
+                                    <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;width: 25%;">Signature:</label>
+                                    <input style="border: none;width: 75%;font-family: 'Open Sans', sans-serif !important;outline: none;border-bottom: 1px solid;" type="text">
+                                </div>
+                                <div style="width: 100%; display: inline-block;white-space: nowrap;">
+                                    <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;width: 25%;">Print name:</label>
+                                    <input style="border: none;width: 75%;font-family: 'Open Sans', sans-serif !important;outline: none;border-bottom: 1px solid;" type="text">
+                                </div>
+                            </td>
+                            <td style="padding: 3px 10px;border: 2px solid black; height: 100px;width: 50%;" colspan="10">
+
+                                <div style="width: 100%; display: inline-block;white-space: nowrap;margin-bottom:25px;">
+                                    <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;width: 25%;">Signature:</label>
+                                    <input style="border: none;width: 75%;font-family: 'Open Sans', sans-serif !important;outline: none;border-bottom: 1px solid;" type="text">
+                                </div>
+                                <div style="width: 100%; display: inline-block;white-space: nowrap;">
+                                    <label style="font-size: 12px;font-weight: 700;color: #000;margin-bottom: 0;padding-right: 5px;font-family: 'Open Sans', sans-serif !important;width: 25%;">Print name:</label>
+                                    <input style="border: none;width: 75%;font-family: 'Open Sans', sans-serif !important;outline: none;border-bottom: 1px solid;" type="text">
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <table style="width: 100%;width: 100%; margin: 16px 0;">
+                        <tr style="width: 100%;">
+                            <th style="width: 100%;">
+                                <p style="font-size: 10px;text-align: justify;font-weight: 700;color: #90ee90;margin-bottom: 0;font-family: 'Open Sans', sans-serif !important; display: inline-block;">Our paper tape, door bags and cardboard door boxes are now fully recyclable. These are some of our steps in reducing our environmental impact – see
+                                    <span style="font-size: 10px;text-align: start;font-weight: 700;color: #666;margin-bottom: 0;font-family: 'Open Sans', sans-serif !important;">
+                                        <span style=" color: #90ee90;">more at </span>
+                                        <a style="color:#140dda ;" href="#">www.humphreystretton.com/eco</a> . All goods are sold subject to our usual Terms & Conditions of sale including “Goods are not tested or sold as fit for any particular purpose. Any term warranty
+                                        or conditions express implied or statutory to the contrary is excluded. In no circumstances whatsoever shall seller’s liability (in contract tort or otherwise) to the buyer arising under out of or in connection with this contract
+                                        or the goods supplied exceed the invoice price of the particular piece(s) in regard to which complaint is made.” Our Terms & Conditions can be found at www.humphreystretton.com/terms
+                                    </span>
+                                </p>
+
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="daspatch-table">
+                    <table class="table-dis">
+                        <tr>
+                            <th class="table-head" colspan="6">
+                                <div class="input-setts">
+                                    <label class="invoice-label">Invoice to:</label>
+                                </div>
+
+                            </th>
+                            <th class="table-head" colspan="4"><label class="invoice-label">Ticket No.</label></th>
+                        </tr>
+                        <tr>
+                            <td class="table-data" colspan="6"><label class="invoice-label">{{ workOrder?.customer.name }}</label></td>
+                            <td class="table-data" colspan="4">
+                                <input class="text-input" type="text" placeholder="52527" readonly [(ngModel)]="deliveryOrder.ticket_no">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-data" colspan="6" style="padding: 0;">
+                                <!-- <textarea class="ctm-textarea" rows="7" placeholder="Delivery Address" [(ngModel)]="deliveryOrder.invoice_to"></textarea> -->
+                                <table class="table-inner">
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <label class="invoice-label">Delivery Address:</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="Name" [(ngModel)]="deliveryOrder.del_name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="Street" [(ngModel)]="deliveryOrder.del_address_1_street">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="Town" [(ngModel)]="deliveryOrder.del_address_2_town">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="City" [(ngModel)]="deliveryOrder.del_address_3_city">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="Country" [(ngModel)]="deliveryOrder.del_address_4_country">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="Postal Code" [(ngModel)]="deliveryOrder.del_address_5_postal_code">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="table-data table-sec-data" colspan="4">
+                                <table class="table-inner">
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <label class="invoice-label">Despatch Date:</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input type="text" id="start_date" class="text-input" placeholder="Select Date" name="start_date" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD / MM / YYYY',containerClass:'theme-red'}" (bsValueChange)="dateValue($event)" [bsValue]="selectedDate">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <label class="invoice-label">Customer Order No.</label>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <input class="text-input" type="text" placeholder="388" [(ngModel)]="deliveryOrder.order_number">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner">
+                                            <label class="invoice-label">W/O:</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-data-inner position-relative work-order-cell">
+                                            <select class="custom-select-work-orders" (change)="selectWorkOrder($event)">
+                                                <option value="select">Select work order</option>
+                                                <option [value]="i" *ngFor="let order of customerOrders;let i = index" [hidden]="checkSelectedOrder(order.id)">{{ order.work_number }}</option>
+                                            </select>
+                                            <div class="d-flex flex-wrap">
+                                                <span class="fiels-ctm" *ngFor="let order of deliveryOrder.work_orders;let i = index">
+                                                    {{ order.work_number }}
+                                                    <span *ngIf="order.id != workOrder.id">
+                                                        <i-feather class="icon-width w15" name="X" (click)="removeOrder(i)"></i-feather>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="10" class="table-data">
+                                <p class="dispatch-text">Only products identified as such on this Delivery note are FSC certified</p>
+                                <div class="d-flex align-items-center justify-content-between dispatch-check">
+                                    <p class="pro-dispath">Products FSC ® CU-COC-806432</p>
+                                    <div class="remember-me">
+                                        <label class="custom-check custom-check-r">
+                                            <input type="checkbox" [checked]="deliveryOrder.fsc" [(ngModel)]="deliveryOrder.fsc" name="fsc">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Flush <br> Doors</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Frames</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Stops</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Architraves</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Timber <br> Sections</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Hinges</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Glass Pcs</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Glazing <br> Beads</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">FD60 <br> Hinge <br> Packers</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <!-- <input class="text-input" type="text" placeholder="Add" [(ngModel)]="deliveryOrder.properties.flush_door" name="flush_door"> -->
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.flush_door"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.frames" name="frames"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.stops" name="stops"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.architraves" name="architraves"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.timber_sections" name="timber_sections"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.hinges" name="hinges"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.glass_pcs" name="glass_pcs"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.glazing_beads" name="glazing_beads"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding:1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.hinge_packers" name="hinge_packers"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="dispatch-account">
+                        Fire and Acoustic Seals in 2.1m Lengths
+                    </p>
+                    <table class="table-dis">
+                        <tr>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">10 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">10 x 4<br>Intu<br>Smoke</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">15 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">15 x 4<br>Intu<br>Smoke </label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">20 x 4<br>Intu Strip</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">20 x 4<br>Intu<br> Smoke</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Drop<br>Down<br>Seals</label>
+                            </td>
+                            <td colspan="1" class="table-data">
+                                <label class="invoice-label">Weather<br>Seals</label>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_10_4" name="intu_strip_10_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_10_4" name="intu_smoke_10_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_15_4" name="intu_strip_15_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_15_4" name="intu_smoke_15_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_strip_20_4" name="intu_strip_20_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.intu_smoke_20_4" name="intu_smoke_20_4"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.drop_down_seals" name="drop_down_seals"></textarea>
+                            </td>
+                            <td colspan="1" class="table-data table-height-data" style="padding: 1px;">
+                                <textarea placeholder="Add" style="font-size: 12px; font-weight: 400;color: #000;margin-bottom: 0;border: none;width: 100%;height: 66px;outline: none;font-family: 'Open Sans', sans-serif !important;resize: none;overflow: hidden;" [(ngModel)]="deliveryOrder.properties.weather_seals" name="weather_seals"></textarea>
+                            </td>
+
+                        </tr>
+                    </table>
+                    <div class="padds-py"></div>
+                    <table class="table-dis">
+                        <tr>
+                            <th class="table-head" colspan="5"><label class="invoice-label">Site Contact:<span class="text-danger-style">*</span></label></th>
+                            <th class="table-head" colspan="5"><label class="invoice-label">Site Number:<span class="text-danger-style">*</span></label></th>
+                        </tr>
+                        <tr>
+                            <td class="table-data" colspan="5">
+                                <input class="text-input" type="text" placeholder="Contact Name" [(ngModel)]="deliveryOrder.site_contact" name="site_contact">
+                            </td>
+                            <td class="table-data" colspan="5">
+                                <input class="text-input" type="text" placeholder="Contact Phone Number" [(ngModel)]="deliveryOrder.site_number" name="site_number">
+                            </td>
+                        </tr>
+
+                    </table>
+                    <div class="padds-py"></div>
+                    <table class="table-dis">
+                        <tr>
+                            <th class="table-head" colspan="10"><label class="invoice-label">Other / Notes</label></th>
+
+                        </tr>
+                        <tr>
+                            <td class="table-data" colspan="10">
+
+                                <textarea class="ctm-textarea-sec-2" rows="10" placeholder="Other / Notes" [(ngModel)]="deliveryOrder.other_notes" name="other_notes"></textarea>
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="dispatch-table-buttons">
+                    <div class="d-flex">
+                        <a class="disable-btn-dispatch" href="javascript:void(0)" (click)="redirectBack()">
+                            Discard</a>
+                        <a class="credit-check mr-1" href="javascript:void(0)" *ngIf="!currentDeliveryNote && _auth.checkPermissions('rod','write')" (click)="addDeliveryNote()">
+                            Save</a>
+                        <a class="credit-check mr-1" href="javascript:void(0)" *ngIf="currentDeliveryNote && _auth.checkPermissions('rod','write')" (click)="updateDeliveryNote()">
+                            Update</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

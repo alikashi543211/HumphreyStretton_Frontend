@@ -1,0 +1,9 @@
+/* .table {
+    table-layout: fixed;
+    word-wrap: break-word;
+} */
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}

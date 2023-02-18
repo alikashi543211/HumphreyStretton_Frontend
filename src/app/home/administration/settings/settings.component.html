@@ -1,0 +1,108 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ADMINISTRATION</a></li>
+                <li class=" breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">SETTINGS</a></li>
+            </ul>
+
+        </div>
+        <div class="tables-roles-main">
+            <div class="roles-main p-3" *ngIf="settings">
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h4 for="blacklist_enabled">Blacklist Email</h4>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="remember-me">
+                            <label class="custom-check custom-check-r">
+                                <input type="checkbox" checked="checked" [(ngModel)]="settings.blacklist_email_enabled">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h4 class="mt-2">Email Recipients <span class="small">(press enter to add)</span></h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-style mb-2">
+                            <label class="my-0" style="font-size:1rem; font-weight:normal;margin-left: 5px;">An email will be send to <span class="text-red" style="font-size:1rem; font-weight:normal;">scott@humphreystretton.com</span>. Below you can add CC for blacklist orders</label>
+                            <input type="email" class="ctm-input type-input" placeholder="email address" (keyup)="addRecipient($event)">
+                            <div class="d-flex flex-wrap">
+                                <span class="fiels-ctm" style="font-size:12px;" *ngFor="let email of settings.blacklist_email_recipients;let i= index">
+                                    {{ email }} <span>
+                                        <i-feather class="plus-rotate" name="plus" (click)="removeRecipient(i)"></i-feather>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="_auth.checkPermissions('administration','write')">
+                    <div class="col justify-content-end d-flex align-items-center">
+                        <a href="javascript:void(0)" class="secondary-sup" (click)="update()">
+                            Update
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tables-roles-main staging-card">
+            <div class="roles-main p-3" *ngIf="sage">
+                <div class="row mb-3">
+                    <div class="remember-me remember-me-radio col-md-6">
+                        <label class="custom-radio setting-radio">LIVE URL
+                            <input type="radio" name="radio" [value]="1" [(ngModel)]="sage.is_live">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="remember-me remember-me-radio col-md-6">
+                        <label class="custom-radio setting-radio">STAGING URL
+                            <input type="radio" name="radio" [value]="0" [(ngModel)]="sage.is_live">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <div class="input-style mb-2">
+                            <label class="my-0" style="font-size:1rem; font-weight:normal;margin-left: 5px;">Live URL</label>
+                            <input type="email" class="ctm-input type-input" placeholder="Live URL" [(ngModel)]="sage.live_url">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-style mb-2">
+                            <label class="my-0" style="font-size:1rem; font-weight:normal;margin-left: 5px;">Staging URL</label>
+                            <input type="email" class="ctm-input type-input" placeholder="Staging URL" [(ngModel)]="sage.staging_url">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-style mb-2">
+                            <label class="my-0" style="font-size:1rem; font-weight:normal;margin-left: 5px;">Live Token</label>
+                            <input type="email" class="ctm-input type-input" placeholder="Live Token" [(ngModel)]="sage.live_token">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-style mb-2">
+                            <label class="my-0" style="font-size:1rem; font-weight:normal;margin-left: 5px;">Staging Token</label>
+                            <input type="email" class="ctm-input type-input" placeholder="Staging Token" [(ngModel)]="sage.staging_token">
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="row" *ngIf="_auth.checkPermissions('administration','write')">
+                    <div class="col justify-content-end d-flex align-items-center">
+                        <a href="javascript:void(0)" class="secondary-sup" (click)="updateSageListing()">
+                            Update
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

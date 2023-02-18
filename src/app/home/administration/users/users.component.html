@@ -1,0 +1,84 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ADMINISTRATION</a></li>
+                <li class=" breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">USERS LISTS</a></li>
+            </ul>
+            <a class="secondary-sup" href="javascript:void(0)" (click)="addUser()" *ngIf="_auth.checkPermissions('administration','write')">
+                <i-feather class="plus" name="plus"></i-feather> New User
+            </a>
+
+        </div>
+        <div class="roles-main">
+            <div class="form-group sear-bar-roles position-relative mb-0">
+                <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchUser()" [(ngModel)]="searchParams.search">
+                <i-feather class="search-ctm" name="search"></i-feather>
+            </div>
+            <div class="tables-roles-main tables-users-main table-responsive">
+                <table class="table table-fixed">
+                    <thead class="thead-ctm">
+                        <tr>
+                            <th>
+                                <p class="inner-cell">#</p>
+                            </th>
+                            <th>
+                                <p class="inner-cell">Name</p>
+                            </th>
+                            <th>
+                                <p class="inner-cell">Email</p>
+                            </th>
+                            <th>
+                                <p class="inner-cell">Role</p>
+                            </th>
+                            <th>
+                                <p class="inner-cell">Status</p>
+                            </th>
+                            <th *ngIf="_auth.checkPermissions('administration','write')">
+                                <p class="inner-cell">Action</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="t-body-ctm" *ngIf="!isLoading">
+                        <tr *ngFor="let user of users;let i=index">
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <div class="select-box d-flex justify-content-center">
+                                    <div class="input-style form-group">
+                                        <div class="arrow-design">
+                                            <select class="form-control" (change)="updateRole(user,$event,i)" [disabled]="!_auth.checkPermissions('administration','write') || currentUser.id == user.id">
+                                                <option [value]="role.id" *ngFor="let role of roles" [selected]="user.role_id == role.id">{{ role.title }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inner-cell custom-box d-flex justify-content-center">
+                                    <label class="switch" [ngClass]="{'disabled': user.id != currentUser.id || user.status == 2}">
+                                        <input type="checkbox" [checked]="user.status == 1" (change)="updateUserStatus(user)" [disabled]="!_auth.checkPermissions('administration','write') || user.status == 2">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td *ngIf="_auth.checkPermissions('administration','write')">
+                                <div class="select-box d-flex justify-content-center">
+                                    <div class="input-style form-group">
+                                        <i-feather name="edit-3" (click)="userAction(user,'edit',i)" class="mr-2"></i-feather>
+                                        <i-feather name="trash" (click)="userAction(user,'delete',i)"></i-feather>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- Pagination -->
+            <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+        </div>
+    </div>
+
+</div>

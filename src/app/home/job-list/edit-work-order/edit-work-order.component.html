@@ -1,0 +1,395 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 for-respo-devices-rod justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ROD</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ADD</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{
+                        dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="row manual-invoice">
+                <div class="checkbox-width">
+                    <label class="custom-check">
+                        <input type="checkbox" [checked]="isManualInvoice" (change)="updateManualInvoice($event)">
+                        <span class="checkmark"></span>Manual Invoice
+                    </label>
+                </div>
+                <div class="" *ngIf="checkQuotationUpload() && !isManualInvoice">
+                    <div class="input-style add-work import-icon-div">
+                        <input #inputQuotation type="file" id="quotation-file" class="d-none"
+                            (change)="selectQuotation($event)"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <label class="d-inline-block cursor-pointer" for="quotation-file">
+                            <div class="import-box mt-1">
+                                <div class="import-icon">
+                                    <svg id="import-01" xmlns="http://www.w3.org/2000/svg" width="32.077"
+                                        height="28.073" viewBox="0 0 32.077 28.073">
+                                        <path id="Path_2063" data-name="Path 2063"
+                                            d="M37,15.284a1.575,1.575,0,0,1-.508.613.989.989,0,0,1-1.387-.421c-.254-.446-.458-.91-.743-1.338A8.78,8.78,0,0,0,27.7,10.081c-1.505-.155-3.023-.031-4.534-.068-.211,0-.2.1-.2.248v2.57a1.036,1.036,0,0,1-1.765.88q-3.874-2.917-7.761-5.822a1.016,1.016,0,0,1-.006-1.753Q17.317,3.228,21.2.314a1.06,1.06,0,0,1,1.214-.2,1.089,1.089,0,0,1,.557,1.1c-.012.842,0,1.691-.006,2.533,0,.211.062.26.26.26,1.2.012,2.4-.043,3.6.043a10.736,10.736,0,0,1,5.389,1.9A10.936,10.936,0,0,1,36.1,10.67a11.138,11.138,0,0,1,.842,3.19c.006.056-.012.13.062.161v1.251Z"
+                                            transform="translate(-4.923 0.006)" fill="#dc0100" />
+                                        <path id="Path_2064" data-name="Path 2064"
+                                            d="M13.038,29.3H2.261A2.043,2.043,0,0,1,0,27.03V5.513A2.047,2.047,0,0,1,2.285,3.24H5.7c.229,0,.322.031.322.3-.019,1.146-.012,2.3,0,3.444,0,.223-.062.285-.279.279-.489-.019-.979,0-1.474-.012-.2,0-.266.05-.266.26.012.9,0,1.8,0,2.694q0,7.358-.006,14.722c0,.328.1.384.4.384q8.64-.009,17.287,0c.3,0,.378-.068.372-.372-.012-3.091,0-6.181-.012-9.272,0-.254.05-.334.322-.334,1.127.019,2.255.012,3.382,0,.229,0,.322.031.322.3-.012,3.852,0,7.7-.006,11.557A2.007,2.007,0,0,1,23.932,29.3h-10.9Z"
+                                            transform="translate(0 -1.23)" fill="#dc0100" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <span *ngIf="checkQuotationUpload() && !isManualInvoice" class="import-text">Import Quotation</span>
+            </div>
+
+        </div>
+
+        <div class="add-work-order">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group">
+                                    <label class="d-block">Product<span class="text-danger">*</span></label>
+                                    <select class="ctm-input bg-white" placeholder="Change Action" disabled
+                                        (change)="selectProduct($event)">
+                                        <option value="select" selected>Select Product</option>
+                                        <option [value]="i" *ngFor="let product of products;let i = index">{{
+                                            product.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap">
+                                <span class="fiels-ctm" *ngFor="let product of selectedProducts;let i = index">
+                                    {{ product.name }} <i-feather class="remove-product" name="X"
+                                        (click)="removeProduct(i)"></i-feather>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="customerInputOut()">
+                                    <label class="d-block">Customers<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input type-input customer-input " disabled
+                                        placeholder="Customer" (input)="searchCustomer($event)"
+                                        (focus)="customerInput = true" [(ngModel)]="customerName">
+                                    <!-- <div class="custom-dropdown-list" *ngIf="customerInput">
+                                        <ul>
+                                            <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                                                {{ customer.name }}
+                                            </li>
+                                            <li (click)="selectCustomer('new')">Add Customer</li>
+                                        </ul>
+                                    </div> -->
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="customerName">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block">Sage Customer Id<span class="text-danger">*</span></label>
+                            <div class="type-pass">
+                                <input type="text" readonly class="ctm-input" placeholder="Sage Customer Id"
+                                    [(ngModel)]="sageCustomerId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2" *ngIf="showSageSearch">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="sageCustomerInputOut()">
+                                    <label class="d-block">Sage Customer</label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Search Sage Customer"
+                                        (input)="searchSageCustomer($event)" (focus)="sageCustomerInput = true"
+                                        [(ngModel)]="sageCustomerName">
+                                    <div class="custom-dropdown-list" *ngIf="sageCustomerInput">
+                                        <ul>
+                                            <li *ngFor="let customer of sageCustomers"
+                                                (click)="selectSageCustomer(customer)">
+                                                {{ customer.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngFor="let product of selectedProducts">
+                    <div class="col-md-6">
+                        <div class="input-style mb-2">
+                            <label class="d-block"> <span class="red-label">[W/O]</span>{{ product.name }} Quantity<span
+                                    class="text-danger">*</span></label>
+                            <input type="number" min="1" class="ctm-input type-input" placeholder="Enter quantity"
+                                [(ngModel)]="product.quantity">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style mb-2">
+                            <label class="d-block"> <span class="red-label">[W/O]</span>{{ product.name }} Value<span
+                                    class="text-danger">*</span></label>
+                            <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                placeholder="Enter Value" [(ngModel)]="product.value" (input)="calculateValue()">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="employeeInputOut()">
+                                    <label class="d-block">Sales Person<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Sales Person" readonly
+                                        (input)="searchEmployee($event)" (focus)="employeeInput = true"
+                                        [(ngModel)]="employeeName">
+                                    <!-- <div class="custom-dropdown-list" *ngIf="employeeInput">
+                                        <ul>
+                                            <li *ngFor="let employee of employees" (click)="selectEmployee(employee)">
+                                                {{ employee.name }}
+                                            </li>
+                                        </ul>
+                                    </div> -->
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="schedulerInputOut()">
+                                    <label class="d-block">Scheduler<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Scheduler"
+                                        (input)="searchEmployee($event)" (focus)="schedulerInput = true"
+                                        [(ngModel)]="scheduler">
+                                    <div class="custom-dropdown-list" *ngIf="schedulerInput">
+                                        <ul>
+                                            <li *ngFor="let employee of employees" (click)="selectScheduler(employee)">
+                                                {{ employee.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block">Due Date<span class="text-danger">*</span></label>
+                            <div class="type-pass">
+                                <input type="text" class="ctm-input" placeholder="23/10/2021" [(ngModel)]="currentDate"
+                                    (bsValueChange)="dateChanged($event)" [(bsValue)]="currentDate" bsDatepicker
+                                    [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Contract Name<span class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add contract name" readonly
+                                [(ngModel)]="workOrder.contract" name="contract">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Customer Order#<span class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add customer order"
+                                [(ngModel)]="workOrder.order_number" name="order_number">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Location<span class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add location" readonly
+                                [(ngModel)]="workOrder.location" name="location">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Delivery Fee<span class="text-danger">*</span></label>
+                            <input type="number" min="0.01" step="0.01" class="ctm-input" placeholder="Add delivery fee"
+                                [(ngModel)]="workOrder.delivery_fee" (input)="calculateValue()" name="delivery_fee">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work">
+                            <label class="d-block"> Description</label>
+                            <textarea class="ctm-textarea" placeholder="Add description"
+                                [(ngModel)]="workOrder.description" name="description" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="row col-md-12 mt-1">
+                        <div class="input-style add-work col-md-3">
+                            <label class="d-block"> Settlement Discount</label>
+                        </div>
+                        <div class="d-flex-percentage col-md-9">
+                            <div class="remember-me px-1">
+                                <label class="custom-check custom-check-r">
+                                    <input type="checkbox" checked="checked" [(ngModel)]="settlementDiscount"
+                                        (change)="calculateDiscount()">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-12 mt-1" *ngIf="settlementDiscount">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <div class="input-style add-work ">
+                                    <label class="d-block"> Settlement Due Days<span
+                                            class="text-danger">*</span></label>
+                                </div>
+                                <div class="d-flex-percentage">
+                                    <div class="input-style add-work ">
+                                        <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                            placeholder="Add settlement due days"
+                                            [(ngModel)]="workOrder.settlement_due_days">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="input-style add-work ">
+                                    <label class="d-block"> Settlement Discount %<span
+                                            class="text-danger">*</span></label>
+                                </div>
+                                <div class="d-flex-percentage">
+
+                                    <div class="input-style add-work ">
+                                        <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                            placeholder="Add settlement discount"
+                                            [(ngModel)]="workOrder.settlement_discount" (input)="calculateDiscount()">
+                                    </div>
+                                    <div class="icons-per">
+                                        <i-feather class="col-fixed" name="percent"></i-feather>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="input-style add-work ">
+                                    <label class="d-block"> Settlement Discount Amount<span
+                                            class="text-danger">*</span></label>
+                                </div>
+                                <div class="d-flex-percentage">
+                                    <div class="input-style add-work ">
+                                        <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                            placeholder="Add settlement disc. amount"
+                                            [(ngModel)]="workOrder.settlement_discount_amount" disabled>
+                                    </div>
+                                    <div class="icons-per">
+                                        <i class="fa fa-pound-sign col-fixed"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12 mt-1">
+                        <div class="input-style add-work col-md-3">
+                            <label class="d-block"> Straight Discount</label>
+                        </div>
+                        <div class="d-flex-percentage col-md-9">
+                            <div class="remember-me px-1">
+                                <label class="custom-check custom-check-r">
+                                    <input type="checkbox" checked="checked" [(ngModel)]="straightDiscount"
+                                        (change)="calculateDiscount()">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-12" [ngClass]="settlementDiscount ? '' : 'mt-1'" *ngIf="straightDiscount">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <div class="input-style add-work ">
+                                    <label class="d-block"> Straight Discount %<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="d-flex-percentage">
+                                    <div class="input-style add-work ">
+                                        <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                            placeholder="Add straight discount"
+                                            [(ngModel)]="workOrder.straight_discount" (input)="calculateDiscount()">
+                                    </div>
+                                    <div class="icons-per">
+                                        <i-feather class="col-fixed" name="percent"></i-feather>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="input-style add-work ">
+                                    <label class="d-block"> Straight Discount Amount<span
+                                            class="text-danger">*</span></label>
+                                </div>
+                                <div class="d-flex-percentage">
+                                    <div class="input-style add-work ">
+                                        <input type="number" min="0.01" step="0.01" class="ctm-input type-input"
+                                            placeholder="Add straight disc. amount"
+                                            [(ngModel)]="workOrder.straight_discount_amount" disabled>
+                                    </div>
+                                    <div class="icons-per">
+                                        <i class="fa fa-pound-sign col-fixed"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <div class="input-style add-work ">
+                                <label class="d-block"> Total<span
+                                    class="text-danger">*</span></label>
+                            </div>
+                            <div class="d-flex-percentage">
+                                <div class="input-style add-work">
+                                    <input type="number" min="0.01" step="0.01" class="ctm-input"
+                                        placeholder="Total Value" [(ngModel)]="workOrder.total_value"
+                                        name="total_value">
+                                </div>
+                                <div class="icons-per">
+                                    <i class="fa fa-pound-sign col-fixed"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2 d-flex">
+                        <div class="row">
+                            <div class="col-md-6 d-flex align-items-center">
+                                <div class=" remember-me mt-3">
+                                    <label class="custom-check custom-check-r">FSC:
+                                        <input type="checkbox" [checked]="workOrder.fsc" [(ngModel)]="workOrder.fsc">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- <div class="btns-add-work col-md-6 view-attach">
+                                <a href="javascript:void(0)" class="add-btn" (click)="viewAttachments()">View Attachments</a>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2 d-flex" style="font-size: 1.4rem; font-weight: bold;">
+                        Timeline
+                    </div>
+                    <div class="col-md-12 mb-2 d-flex" *ngFor="let order of workOrerAttachments">
+                        <span class="work-number" (click)="viewAttachments(order)">{{order.work_number}}</span>
+                    </div>
+
+                    <!-- <div class="col-md-6">
+
+                    </div> -->
+
+                    <div class="col-md-12">
+                        <div class="btns-add-work">
+                            <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+                            <a href="javascript:void(0)" class="add-btn" (click)="addSalesOrder()">Update</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

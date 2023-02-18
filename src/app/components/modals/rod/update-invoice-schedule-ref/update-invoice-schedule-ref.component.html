@@ -1,0 +1,38 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title" *ngIf="type == 'invoice_no'">UPDATE BULK INVOICE NO</h4>
+    <h4 class="modal-title" *ngIf="type == 'schedule_ref'">UPDATE BULK SCHEDULE REF</h4>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+    <div class="row" *ngIf="type == 'invoice_no'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="input-style mb-2">
+                    <label class="d-block">Invoice No<span class="text-danger">*</span></label>
+                    <input type="text" class="ctm-input type-input" placeholder="Gd12-19" [(ngModel)]="invoiceNo">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'schedule_ref'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="input-style mb-2">
+                    <label class="d-block">Schedule Ref<span class="text-danger">*</span></label>
+                    <input type="text" class="ctm-input type-input" placeholder="Gd12-19" [(ngModel)]="scheduleRef">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="UpdateInvoiceNo()" *ngIf="type == 'invoice_no'">Update</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="updateScheduleRef()" *ngIf="type == 'schedule_ref'">Update</a>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">DELIVERY LIST</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">LOAD ANALYTICS</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+        </div>
+        <div class="roles-main delivery-list-table pb-1" *ngIf="analytics.length">
+            <div class="tab-content p-1" style="padding-left:0px !important">
+                <h1 class="change-pass">Total Products</h1>
+                <div class="row mb-2">
+                    <div class="col-md-3 mb-1" *ngFor="let load of analytics;let i = index">
+                        <div class="work-orders-card" [ngStyle]="{ 'background-color': colorsArray[i] }">
+                            <span>{{ load.name }}</span>
+                            <span>{{ load.total_products_count }}</span>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="change-pass">Total Load</h1>
+                <div class="row">
+                    <div class="col-md-4 mb-1" *ngFor="let load of analytics;let i = index">
+                        <div class="work-order-load">
+                            <p class="load-name">{{ load.name }}</p>
+                            <span class="load-count">{{ load.current_workload }}</span>
+                            <div class="position-relative">
+                                <div class="progress-cell-bar load-progress"><span [style.width.%]="load.current_workload_percentage"></span></div>
+                            </div>
+                            <p class="load-percentage">Current work load <strong class="ml-1">{{ load.current_workload_percentage }}%</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

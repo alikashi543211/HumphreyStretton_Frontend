@@ -1,0 +1,185 @@
+ <div class="dashboard-main">
+     <div class="dashboard-content ">
+         <div class="d-flex align-items-center mb-16 justify-content-between">
+             <ul class="breadcrumb">
+                 <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">HISTORY</a></li>
+                 <li class=" breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+             </ul>
+             <div class="d-flex">
+                 <div class="dropdown">
+                     <button class="credit-check dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <i-feather class="download" name="download"></i-feather> Download Data
+                     </button>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                         <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                         <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="roles-main delivery-list-table">
+             <div class="d-flex align-items-center justify-content-between delivery-list-main mb-2">
+                 <div class="d-flex for-media-setts">
+                     <div class="form-group sear-bar-roles position-relative mb-0">
+                         <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchOrder('search')" [(ngModel)]="searchParams.search">
+                         <i-feather class="search-ctm" name="search"></i-feather>
+                     </div>
+                     <div class="search-inputs d-flex">
+                         <div class="search-inputs mr-10">
+                             <div class="input-style ">
+                                 <div class="type-pass">
+                                     <input type="text" id="start_date" class="ctm-input" placeholder="From" name="start_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="startDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [maxDate]="endDate" autocomplete="off">
+                                     <div class="icon-eye d-flex align-items-center justify-content-center">
+                                         <i-feather class="calender" name="calendar"></i-feather>
+                                     </div>
+                                     <i-feather name="X" class="clear-filter" (click)="startDate = null" *ngIf="startDate"></i-feather>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="search-inputs">
+                             <div class="input-style">
+                                 <div class="type-pass">
+                                     <input type="text" id="end_date" class="ctm-input" placeholder="To" name="end_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="endDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [minDate]="startDate" autocomplete="off">
+                                     <div class="icon-eye d-flex align-items-center justify-content-center">
+                                         <i-feather class="calender" name="calendar"></i-feather>
+                                     </div>
+                                     <i-feather name="X" class="clear-filter" (click)="endDate = null" *ngIf="endDate"></i-feather>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="tab-table">
+                 <div class="tables-roles-main tables-users-main table-responsive">
+                     <table class="table">
+                         <thead class="thead-ctm">
+                             <tr>
+                                 <th class="cursor-pointer" (click)="sortData('work_number')">
+                                     <p class="inner-cell">Work# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('location')">
+                                     <p class="inner-cell">Location <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'location' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'location' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                     <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('contract')">
+                                     <p class="inner-cell">Contract <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('products.name')">
+                                     <p class="inner-cell">Product <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th>
+                                     <p class="inner-cell">Status</p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('fsc')">
+                                     <p class="inner-cell">FSC <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'fsc' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'fsc' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('delivery')">
+                                     <p class="inner-cell">Delivery Date <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'delivery' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'delivery' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('order_number')">
+                                     <p class="inner-cell">Order# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th class="cursor-pointer" (click)="sortData('invoice_no')">
+                                     <p class="inner-cell">Invoice# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'ASC'"></i></p>
+                                 </th>
+                                 <th>
+                                     <p class="inner-cell">Schedule Ref</p>
+                                 </th>
+                                 <th>
+                                     <p class="inner-cell">Job Notes</p>
+                                 </th>
+                                 <th>
+                                     <p class="inner-cell">Actions</p>
+                                 </th>
+                             </tr>
+                         </thead>
+                         <tbody class="t-body-ctm">
+                             <tr class="active-row" *ngFor="let his of histories;let i = index">
+                                 <td>{{ his.work_number }}</td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.location ?? '-' }}</p>
+                                 </td>
+
+                                 <td>
+                                     <p class="inner-cell">{{ his.customer.name ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.contract ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.product.name ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.status ?? '-' }}</p>
+                                 </td>
+
+                                 <td>
+                                     <p class="inner-cell" *ngIf="his.fsc">
+                                         <i-feather name="check"></i-feather>
+                                     </p>
+                                     <p class="inner-cell" *ngIf="!his.fsc">-</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.delivery ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.order_number ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.invoice_no ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <p class="inner-cell">{{ his.schedule_ref ?? '-' }}</p>
+                                 </td>
+                                 <td>
+                                     <div class="inner-cell view-anchor-tooltip">
+                                         <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="his.job_notes_count == '0'" (click)="addJobNote(his.id,i)">
+                                             <i-feather class="icon-width" name="plus"></i-feather>
+                                         </a>
+                                         <a class="view-anchor red" href="javascript:void(0)" *ngIf="his.job_notes_count != '0'" (click)="addJobNote(his.id,i)">
+                                             View
+                                         </a>
+                                         <div class="tooltiptext-view" *ngIf="his.job_notes_count != '0' && his.latest_job_note.description">
+                                             <div class="d-flex align-items-center justify-content-end">
+                                                 <a class="tooltip-anchor-modal" href="javascript:void(0)" (click)="addJobNote(his.id,i)">
+                                                     Add Note <i-feather class="icon-width w15" name="plus"></i-feather></a>
+
+                                             </div>
+                                             <div class="toop-hight" [innerHtml]="his.latest_job_note.description"></div>
+                                             <div class="date-tooptip-iner">
+                                                 {{ his.latest_job_note.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                             </div>
+                                         </div>
+                                     </div>
+
+                                 </td>
+                                 <td>
+                                     <div class="list-icons-talbe d-flex justify-content-center align-items-center">
+                                         <a class="icon-anchor-list" href="javascript:void(0)" (click)="reorder(his,i)" *ngIf="_auth.checkPermissions('history','write')">
+                                             <i-feather class="icon-width" name="corner-up-left"></i-feather>
+                                         </a>
+                                         <a class="icon-anchor-list" href="javascript:void(0)" (click)="viewTimeline(his,i)">
+                                             <img src="assets/img/line-img-gray.svg" alt="img">
+                                         </a>
+
+                                     </div>
+                                 </td>
+
+
+                             </tr>
+
+                         </tbody>
+                     </table>
+
+                 </div>
+                 <!-- Pagination -->
+                 <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+             </div>
+
+         </div>
+     </div>
+
+ </div>

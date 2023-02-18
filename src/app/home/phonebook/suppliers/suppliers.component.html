@@ -1,0 +1,96 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">PHONEBOOK</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">SUPPLIERS</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="d-flex">
+                <a class="secondary-sup" href="javascript:void(0)" (click)="addSupplier()" *ngIf="_auth.checkPermissions('phonebook','write')">
+                    <i-feather class="plus" name="plus"></i-feather> Add Entry
+                </a>
+
+            </div>
+        </div>
+        <div class="roles-main delivery-list-table">
+            <div class="d-flex align-items-center justify-content-between delivery-list-main">
+                <div class="d-flex for-media-setts">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchSuppliers()" [(ngModel)]="searchParams.search">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="tab-table">
+                <div class="tables-roles-main tables-users-main table-responsive">
+                    <table class="table">
+                        <thead class="thead-ctm">
+                            <tr>
+                                <th class="cursor-pointer" (click)="sortData('name')">
+                                    <p class="inner-cell">Name <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'name' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('address')">
+                                    <p class="inner-cell">Address <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'address' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'address' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('phone_no')">
+                                    <p class="inner-cell">Telephone <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'phone_no' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'phone_no' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('email')">
+                                    <p class="inner-cell">Email <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'email' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'email' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('products')">
+                                    <p class="inner-cell">Products <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th *ngIf="_auth.checkPermissions('phonebook','write')">
+                                    <p class="inner-cell">Actions</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="t-body-ctm">
+                            <tr class="active-row" *ngFor="let s of suppliers; let i = index">
+                                <td>
+                                    <p class="inner-cell">{{ s.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ s.address }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ s.phone_no }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ s.email }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell" style="white-space: normal;">{{ s.products }}</p>
+                                </td>
+                                <td *ngIf="_auth.checkPermissions('phonebook','write')">
+                                    <div class="list-icons-talbe d-flex justify-content-center">
+
+                                        <a class="icon-anchor-list" href="javascript:void(0)" (click)="editSupplier(s,i)">
+                                            <i-feather class="icon-width" name="edit-3"></i-feather>
+                                        </a>
+
+                                        <a class="icon-anchor-list" href="javascript:void(0)" (click)="deleteSupplier(s,i)">
+                                            <i-feather class="icon-width" name="trash"></i-feather>
+                                        </a>
+
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+            </div>
+
+        </div>
+    </div>
+
+</div>

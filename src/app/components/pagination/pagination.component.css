@@ -1,0 +1,14 @@
+.pagination .select-box .arrow-design {
+    width: auto;
+}
+
+.pagination .row-heading {
+    white-space: nowrap;
+}
+
+.disabled:hover {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: #14274E1A;
+    color: #656565
+}

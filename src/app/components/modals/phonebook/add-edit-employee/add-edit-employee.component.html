@@ -1,0 +1,122 @@
+<!-- Modal Header -->
+<div class="modal-header">
+
+    <h4 class="modal-title" *ngIf="type == 'add'">ADD EMPLOYEE</h4>
+    <h4 class="modal-title" *ngIf="type == 'edit'">UPDATE EMPLOYEE</h4>
+
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+
+    <div class="row" *ngIf="type == 'add'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Name<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Prince Build" [(ngModel)]="newEmployee.name">
+            </div>
+
+        </div>
+        <!-- <div class="col-md-12 add-employee-arrow">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Role</label>
+                        <select class="ctm-input bg-white" [(ngModel)]="newEmployee.role_id">
+                            <option value="null" selected>Select Role</option>
+                            <option [value]="role.id" *ngFor="let role of roles">{{ role.title }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Email </label>
+                <input type="email" class="ctm-input type-input" placeholder="Ex: John@gmail.com" [(ngModel)]="newEmployee.email">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">External Contact Number </label>
+                <input type="email" class="ctm-input type-input" placeholder="Ex: John@gmail.com" [(ngModel)]="newEmployee.external_contact">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Extension Number </label>
+                <input type="email" class="ctm-input type-input" placeholder="0236 54321" [(ngModel)]="newEmployee.extension_number">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <h5 class="d-block">Mobile numbers for office use only, don’t release mobile numbers to any external party. You could always transfer a call to a mobile, click Transfer > Blind > [Type Number] > Send. This will transfer the call and display the callers number rather than internal number</h5>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style ">
+                <label class="d-block">Mobile Number</label>
+                <input type="text" class="ctm-input type-input" placeholder="0236 54321" [(ngModel)]="newEmployee.phone_no">
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row" *ngIf="type =='edit'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Employee Name<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Prince Build" [(ngModel)]="employee.name">
+            </div>
+
+        </div>
+        <!-- <div class="col-md-12 add-employee-arrow">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Role<span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" [(ngModel)]="employee.role_id">
+                            <option value="null" selected>Select Role</option>
+                            <option [value]="role.id" *ngFor="let role of roles">{{ role.title }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Email </label>
+                <input type="email" class="ctm-input type-input" placeholder="Ex: John@gmail.com" [(ngModel)]="employee.email">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">External Contact Number </label>
+                <input type="email" class="ctm-input type-input" placeholder="Ex: John@gmail.com" [(ngModel)]="employee.external_contact">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Extension Number </label>
+                <input type="email" class="ctm-input type-input" placeholder="0236 54321" [(ngModel)]="employee.extension_number">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style ">
+                <label class="d-block">Mobile Number</label>
+                <input type="text" class="ctm-input type-input" placeholder="0236 54321" [(ngModel)]="employee.phone_no">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" *ngIf="type == 'add'" (click)="addEmployee()">Save</a>
+        <a href="javascript:void(0)" class="add-btn" *ngIf="type == 'edit'" (click)="updateEmployee()">Update</a>
+    </div>
+</div>

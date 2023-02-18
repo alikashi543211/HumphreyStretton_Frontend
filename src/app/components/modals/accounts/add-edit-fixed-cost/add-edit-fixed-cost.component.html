@@ -1,0 +1,148 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title" *ngIf="type == 'add'">ADD FIXED COST</h4>
+    <h4 class="modal-title" *ngIf="type == 'edit'">EDIT FIXED COST</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+
+    <div class="row" *ngIf="type == 'add'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block"><span class="red-label">Value</span><span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="100" [(ngModel)]="newFixedCost.value">
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block"><span class="red-label">Order Number</span><span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="H1-098" [(ngModel)]="newFixedCost.order_number">
+            </div>
+
+        </div>
+        <div class=" col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="supplierInputOut()">
+                        <label class="d-block"><span class="red-label">Supplier</span> <span class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Search supplier" (input)="getSuppliers($event)" (focus)="supplierInput = true" [(ngModel)]="selectedSupplier">
+                        <div class="custom-dropdown-list" *ngIf="supplierInput">
+                            <ul>
+                                <li *ngFor="let sup of suppliers" (click)="selectSupplier(sup)">
+                                    <strong>{{ sup.name }}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <i-feather class="input-icon" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative">
+                        <label class="d-block"><span class="red-label">Dates</span><span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" placeholder="Select Months" (change)="selectMonth($event)">
+                            <option value="null">Select Months</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                        <div class="d-flex flex-wrap">
+                            <span class="fiels-ctm" *ngFor="let date of newFixedCost.cost_dates;let i = index">
+                                {{ date }} <span>
+                                    <i-feather class="plus-rotate" name="plus" (click)="removeDate(i)"></i-feather>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'edit'">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block"><span class="red-label">Value</span><span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="100" [(ngModel)]="fixedCost.value">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block"><span class="red-label">Order Number</span><span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="H1-98" [(ngModel)]="fixedCost.order_number">
+            </div>
+        </div>
+        <div class=" col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="supplierInputOut()">
+                        <label class="d-block"><span class="red-label">Supplier</span> <span class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Search supplier" (input)="getSuppliers($event)" (focus)="supplierInput = true" [(ngModel)]="selectedSupplier">
+                        <div class="custom-dropdown-list" *ngIf="supplierInput">
+                            <ul>
+                                <li *ngFor="let sup of suppliers" (click)="selectSupplier(sup)">
+                                    <strong>{{ sup.name }}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <i-feather class="input-icon" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative">
+                        <label class="d-block"><span class="red-label">Dates</span><span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" placeholder="Select Months" (change)="selectMonth($event)">
+                            <option value="null">Select Months</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                        <div class="d-flex flex-wrap">
+                            <span class="fiels-ctm" *ngFor="let date of fixedCost.cost_dates;let i = index">
+                                {{ date }} <span>
+                                    <i-feather class="plus-rotate" name="plus" (click)="removeDate(i)"></i-feather>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="addFixedCost()" *ngIf="type =='add' ">Add</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="udpateFixedCost()" *ngIf="type == 'edit'">Update</a>
+    </div>
+</div>

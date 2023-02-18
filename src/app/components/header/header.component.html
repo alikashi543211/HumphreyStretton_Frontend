@@ -1,0 +1,91 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light header-main">
+    <button type="button" id="sidebarCollapse" class="ctm-hamer">
+        <i-feather class="hover-none-icon" name="menu"></i-feather>
+        <img id="img-show" class="img-men-none" src="assets/img/icon-feather-menu-1.svg" alt="img">
+    </button>
+    <div class="header-right">
+        <a class="secondary-sup mr-2" href="https://humphreystretton.com" target="_blank">Humphrey & Stretton</a>
+        <a #elRef class="volume" href="javascript:void(0)" (click)="soundButton(elRef)" tabindex="0" *ngIf="getBrowserName() == 'chrome'"
+            placement="bottom" [ngbTooltip]="showSoundTooltip ? 'Please select text and press Alt+P to listen.' : ''" triggers="click:blur" 
+            tooltipClass="header-tooltip-class"><i-feather name="volume-2"></i-feather>
+        </a>
+        <a #elRef class="volume" href="javascript:void(0)" (click)="soundButton(elRef)" tabindex="0" *ngIf="getBrowserName() == 'firefox'"
+            placement="bottom" [ngbTooltip]="showSoundTooltip ? hintTooltip : ''"
+            triggers="click:blur" tooltipClass="header-tooltip-class"><i-feather name="volume-2"></i-feather>
+        </a>
+        <ng-template #hintTooltip>
+            Please install 
+            <a target="_blank" class="read-aloud" (click)="nToolTip('https://addons.mozilla.org/en-US/firefox/addon/read-aloud/');">Read Aloud</a>
+            extension. If installed, select text and press Alt+P to listen.
+        </ng-template>
+
+        <div class="upper-ctm-dropdown">
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)" role="button"
+                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i-feather name="bell"></i-feather>
+                    <div class="position-absolute dots-post" *ngIf="_firebase.notificationsCount > 0"></div>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <div class="drop-inner">
+                        <h2 class="notification-h">NOTIFICATIONS</h2>
+                        <div class="note-h" *ngFor="let notification of _firebase.notifications"
+                            [ngClass]="{'unread': !notification.payload.val().is_read}">
+                            <div class="inner-note-h">
+                                <i-feather class="bell" name="bell"></i-feather>
+                                <div class="pare-note-box">
+                                    <div class="note-pare" [innerHtml]="notification.payload.val().body"></div>
+                                </div>
+                                <a class="view" href="javascript:void(0)"
+                                    (click)="viewNotification(notification)">view</a>
+                            </div>
+                            <div class="date-time">
+                                <span class="time">{{ notification.payload.val().created_at | date:'hh:mm a' }}</span>
+                                <span class="date">{{ notification.payload.val().created_at | date:'dd MMMM, yyyy'
+                                    }}</span>
+                            </div>
+                        </div>
+                        <a class="show-more" href="javascript:void(0)"
+                            *ngIf="_firebase.totalNotifications>_firebase.pageSize"
+                            (click)="_firebase.loadMore($event)">SHOW MORE</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="input-style phone-dropdown mb-0">
+
+            <div class=" input-rigister custom-dropdown-all-us">
+                <div class="dropdown drop-bottom ">
+                    <button (click)="profileClick()"
+                        class="custom-btn dropdown-toggle dropdown-toggle-add gothic-normel p-list-place feedbackName"
+                        type="button" id="subject" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <div class="img-log-out">
+                            <img class="img-fluid" [src]="user.profile_picture" alt="img">
+                        </div> {{ user.name }}
+                    </button>
+                    <div class="dropdown-menu contc p-0  " aria-labelledby="dropdownMenuButton">
+                        <ul class="droplist">
+                            <li>
+                                <a class="droplist-item" [routerLink]="['/profile']">
+                                    <i-feather class="settings-log-out" name="settings"></i-feather>Profile
+                                </a>
+
+                            </li>
+                            <li>
+                                <a class="droplist-item" href="javascript:void(0);" (click)="logout()">
+                                    <i-feather class="settings-log-out" name="log-out"></i-feather>Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</nav>

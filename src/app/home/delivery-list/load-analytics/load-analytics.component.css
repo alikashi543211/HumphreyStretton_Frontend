@@ -1,0 +1,56 @@
+.work-orders-card {
+    width: 100%;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.work-orders-card span:last-child {
+    font-weight: bolder;
+}
+
+.work-order-load {
+    box-shadow: 1px 0px 20px #0000001f;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.work-order-load .progress-cell-bar>span {
+    height: 6px;
+}
+
+.load-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.load-count {
+    background-color: #dc0a16;
+    color: white;
+    padding: 2px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.progress-cell-bar.load-progress {
+    width: 100%;
+    top: 0;
+    height: 6px;
+    background: #d4e9f0;
+}
+
+.load-percentage {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.work-order-load .position-relative {
+    margin-top: 8px;
+}

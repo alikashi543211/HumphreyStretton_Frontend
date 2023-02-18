@@ -1,0 +1,70 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title" *ngIf="fileType == 1">Production Schedules</h4>
+    <h4 class="modal-title" *ngIf="fileType == 2">Quotations</h4>
+    <h4 class="modal-title" *ngIf="fileType == 3">Other Attachments</h4>
+
+</div>
+
+<!-- Modal body -->
+<div class="modal-body ">
+    <div class="row" *ngIf="type == 'view' && fileType == 1">
+        <div class="col-md-12" *ngFor="let attach of data.attachments;let i = index">
+            <div class="d-flex justify-content-between border-bottom">
+                <p class="text-truncate">{{ attach.name }}</p>
+                <div>
+                    <a [href]="attach.location" target="_blank" class="view-anchor red">View</a>
+                    <i-feather name="trash" class="icon-width ml-3" (click)="deleteAttachment(attach,i)" *ngIf="_auth.checkPermissions('rod','write')"></i-feather>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'view'  && fileType == 2">
+        <div class="col-md-12" *ngFor="let attach of data.quotation_attachments;let i = index">
+            <div class="d-flex justify-content-between border-bottom">
+                <p class="text-truncate">{{ attach.name }}</p>
+                <div>
+                    <a [href]="attach.location" target="_blank" class="view-anchor red">View</a>
+                    <i-feather name="trash" class="icon-width ml-3" (click)="deleteAttachment(attach,i,'quotation_attachments')" *ngIf="_auth.checkPermissions('rod','write')"></i-feather>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'view'  && fileType == 3">
+        <div class="col-md-12" *ngFor="let attach of data.other_attachments;let i = index">
+            <div class="d-flex justify-content-between border-bottom">
+                <p class="text-truncate">{{ attach.name }}</p>
+                <div>
+                    <a [href]="attach.location" target="_blank" class="view-anchor red">View</a>
+                    <i-feather name="trash" class="icon-width ml-3" (click)="deleteAttachment(attach,i,'other_attachments')" *ngIf="_auth.checkPermissions('rod','write')"></i-feather>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == 'add'">
+        <div class="col-md-12 d-flex align-items-center justify-content-center w-100">
+            <label class="dragzone" for="upload-file" role="button" appDragnDrop (filesDropped)="dragFiles($event)">
+                <i class="fa fa-upload"></i> <span>Drag and drop files here </span> <span>or</span> <span class="add-btn">Browse files</span>
+                <input type="file" class="d-none" id="upload-file" placeholder="Due Date" (change)="addAttachment($event)" multiple>
+                <span class="mt-1">Supported files: jpeg, jpg, png, pdf, csv, xlsx, docx, pptx</span>
+            </label>
+        </div>
+    </div>
+    <div class="row mb-2" *ngIf="type == 'add'">
+        <div class="col-md-12" *ngFor="let attach of attachments;let i=index">
+            <div class="d-flex justify-content-between border-bottom">
+                <p class="text-truncate">{{ attach.name }}</p>
+                <i-feather name="trash" class="icon-width" (click)="removeAttachment(i)"></i-feather>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer ">
+    <div class="d-flex align-items-center justify-content-center w-100 ">
+        <a href="javascript:void(0) " class="discard-btn" (click)="cancel()">Close</a>
+        <a href="javascript:void(0) " class="discard-btn " (click)="UploadFiles()" *ngIf="type == 'add'">Upload</a>
+    </div>
+</div>

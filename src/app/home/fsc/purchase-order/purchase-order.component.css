@@ -1,0 +1,31 @@
+
+.roles-main {
+    margin-bottom: 20px;
+    padding-bottom: 1px;
+    padding-top: 15px;
+}
+
+.change-pass {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.work-orders-card {
+    width: 100%;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    min-height: 62px;
+}
+
+.work-orders-card span:last-child {
+    font-weight: bolder;
+}
+
+.form-control-roles{
+    color: unset;
+}

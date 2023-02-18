@@ -1,0 +1,8 @@
+
+.read-aloud:hover {
+    cursor: pointer;
+}
+
+.read-aloud {
+    text-decoration: underline;
+}

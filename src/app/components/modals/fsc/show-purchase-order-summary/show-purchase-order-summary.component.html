@@ -1,0 +1,55 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title">SUMMARY</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="input-style mb-2">
+                        <label class="d-block">Product Type</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-style mb-2">
+                        <label class="d-block">Quantity</label>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row" *ngFor="let product of summary">
+
+                <div class="col-md-6">
+                    <div class="input-style mb-2">
+                        <!-- <label class="d-block">Product Type</label> -->
+                        <h4>{{product.product_type}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-style mb-2">
+                        <!-- <label class="d-block">Quantity</label> -->
+                        <h4>{{product.quantity}}</h4>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer ">
+    <div class="d-flex align-items-center justify-content-center w-100 ">
+        <a href="javascript:void(0) " class="discard-btn" (click)="cancel()">Cancel</a>
+        <!-- <a href="javascript:void(0) " class="add-btn " (click)="confirm()">Confirm</a> -->
+    </div>
+</div>

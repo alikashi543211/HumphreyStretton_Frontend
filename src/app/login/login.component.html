@@ -1,0 +1,55 @@
+<div class="log-in">
+    <div class="d-flex">
+        <div class="img-left-banner">
+
+        </div>
+        <div class="para-content">
+            <h1>Humphrey & Stretton PLC</h1>
+            <div class="text-box">
+                <p class="text-para">is a privately owned company with over 60 years’ experience in manufacturing doors, frames, doorsets, timber screens and all associated joinery products from its’ 18,000 sq.ft premises in Hoddesdon Hertfordshire.</p>
+            </div>
+
+        </div>
+        <div class="right-content">
+            <div class="lost">
+                <p class="lost-p"><span>Are You Lost?</span> <a target="_blank" href="https://humphreystretton.com/">Click Here</a></p>
+            </div>
+            <div class="img-logo">
+                <img class="img-fluid" src="assets/img/logo.png" alt="logo">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form>
+                            <div class="log-in-input">
+                                <div class="input-style  mb-2">
+                                    <label class="d-block">Email<span class="text-danger">*</span></label>
+                                    <input type="email" class="ctm-input" placeholder="Email ID" [(ngModel)]="loginObj.email" (focusout)="validateEmail()" (input)="validateEmail()" name="email">
+                                    <span class="text text-danger" *ngIf="emailValidate.length && !emailValidate.valid">Please enter a valid email address</span>
+                                    <span class="text text-danger" *ngIf="!emailValidate.length">Email is required</span>
+
+                                </div>
+                                <div class="input-style">
+                                    <label class="d-block">Password<span class="text-danger">*</span></label>
+                                    <div class="type-pass">
+                                        <input [type]="showPassword ? 'text':'password'" class="ctm-input" placeholder="Password" [(ngModel)]="loginObj.password" (focusout)="validatePassword()" (input)="validatePassword()" name="password">
+                                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                                            <img [src]="showPassword ? 'assets/img/icon-feather-eye.svg' : 'assets/img/icon-feather-eye-off.svg'" alt="img" (click)="showHidePassword()">
+                                        </div>
+                                    </div>
+                                    <span class="text text-danger" *ngIf="!passwordValidate.length">Password is required</span>
+                                </div>
+                                <a class="fotgot-password" [routerLink]="['/forgot-password']">Forgot Password?</a>
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <button (click)="submitLogin()" href="javascript:void(0)" *ngIf="loginObj.email.length" class="login-p disabled" [disabled]="!emailValidate.length || !emailValidate.valid || !passwordValidate.length" [ngClass]="{'disabled': !emailValidate.length || !emailValidate.valid || !passwordValidate.length}">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

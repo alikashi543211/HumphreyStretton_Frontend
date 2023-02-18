@@ -1,0 +1,52 @@
+.timeline-card-main.show-job-note {
+    max-width: 75%;
+}
+
+.job-details-section {
+    width: 25%;
+    min-width: 25%;
+    position: relative;
+    padding-left: 10px;
+    border-left: 0.5px solid #ccc;
+}
+
+.job-details-section .title {
+    font-size: 16px;
+    color: #DC0100;
+    text-transform: uppercase;
+}
+
+.close-job-details {
+    color: inherit;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 1px;
+    font-size: 13px;
+    font-weight: bolder;
+}
+
+.job-note-description {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+}
+
+.job-note-description .timeline-job-note-details {
+    font-weight: bold;
+}
+
+.timeline-counter {
+    position: absolute;
+    background: #DC0100;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    right: 1rem;
+    font-size: 10px;
+    font-weight: bolder;
+    color: white;
+}

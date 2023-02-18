@@ -1,0 +1,76 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title">JOB NOTES</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="job-note-upper" *ngIf="jobNotes.length">
+                <div class="main-note-box">
+
+                    <div class="note-1 d-flex align-items-start justify-content-between" *ngFor="let note of jobNotes;let i = index">
+                        <div class="img-card-sec">
+                            <div class="img-note">
+                                <img class="img-fluid" [src]="note.user.profile_picture" alt="img">
+                            </div>
+                            <p class="name-img">{{ note.user.name }}</p>
+                            <p class="dir">({{ note.user.role.title }})</p>
+                        </div>
+                        <div class="job-heading-main">
+                            <p class="job-heading">{{ note.title }} <span class="text text-muted small ml-1">({{ note.created_at | date:'dd LLLL, yyyy @ h:mm a' }})</span></p>
+                            <div class="para-job" [innerHtml]="note.description">
+                            </div>
+                        </div>
+                        <div class="trash-box d-flex align-items-center ">
+                            <a class="edit-btn" href="javascript:void(0)">
+                                <i-feather class="delete-icon-modal" name="trash-2" (click)="deleteJobNote(note.id,i)"></i-feather>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="blur-box" *ngIf="this.nextPage">
+                    <a class="load-more-btn" href="javascript:void(0)" (click)="getJobNotes(true)">
+                        LOAD MORE
+                    </a>
+                </div>
+            </div>
+            <div *ngIf="_auth.checkPermissions(module,'write')">
+                <div class="input-style mt-1 mb-2">
+                    <label class="d-block">Title Job Note<span class="text-danger">*</span></label>
+                    <input type="text" class="ctm-input" placeholder="Title" [(ngModel)]="newNote.title">
+                </div>
+                <div class="text-area-modal  mb-1">
+                    <div class="input-style">
+                        <textarea class="ctm-textarea" placeholder="Add Text For Job Note" [(ngModel)]="newNote.description"></textarea>
+                    </div>
+                </div>
+                <div class="notify-main-box d-flex align-items-center justify-content-between">
+                    <p class=" notify-to ">
+                        Notify To
+                    </p>
+                    <div class="remember-me" *ngFor="let role of notify">
+                        <label class="custom-check custom-check-r">{{ role.title }}
+                            <input type="checkbox" [checked]="role.status" [(ngModel)]="role.status">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer ">
+    <div class="d-flex align-items-center justify-content-center w-100 ">
+        <a href="javascript:void(0) " class="discard-btn" (click)="cancel()">Close</a>
+        <a href="javascript:void(0) " class="add-btn " (click)="addJobNote()" *ngIf="_auth.checkPermissions(module,'write')">Add</a>
+    </div>
+</div>

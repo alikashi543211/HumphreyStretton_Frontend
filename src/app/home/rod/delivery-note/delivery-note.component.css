@@ -1,0 +1,27 @@
+.custom-select-work-orders {
+    width: 100%;
+    border: none;
+    background: none;
+    appearance: none;
+}
+
+.ticket-d-detail.active>.view-dis {
+    visibility: hidden;
+    display: block !important;
+}
+
+
+.dispatch-table-buttons {
+    align-items: flex-end;
+    display: flex;
+    justify-content: end;
+}
+
+.text-danger-style {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    position: relative;
+    top: 1px;
+    padding: 0 0.5rem;
+    color: #dc3545 !important;
+}

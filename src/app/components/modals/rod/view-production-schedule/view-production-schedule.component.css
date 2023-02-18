@@ -1,0 +1,52 @@
+.border-bottom {
+    border-bottom: 1px solid #ccc;
+    margin-top: 10px;
+    padding-bottom: 5px;
+}
+
+.border-bottom>p,
+.border-bottom>a {
+    font-size: 1.5rem;
+    margin-bottom: 0px;
+}
+
+.icon-width {
+    height: 18px;
+    width: 18px;
+}
+
+
+a.view-anchor.red {
+    color: #DC0100 !important;
+}
+
+.dragzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    border: 1px dashed rgb(128, 128, 128, 0.5);
+    padding: 25px;
+    font-size: 12px;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.dragzone>.fa {
+    font-size: 25px;
+}
+
+.dragzone>.add-btn {
+    padding: 10px;
+    height: auto;
+    width: auto;
+    min-width: unset;
+    font-size: 12px;
+}
+
+.dragzone.fileOver {
+    border-style: solid;
+    background-color: rgb(128, 128, 128, 0.5);
+}

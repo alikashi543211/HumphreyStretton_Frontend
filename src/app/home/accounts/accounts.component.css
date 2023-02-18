@@ -1,0 +1,20 @@
+a.icon-anchor-list.red,
+a.view-anchor.red {
+    color: #DC0100 !important;
+}
+
+/* .search-last input{
+    margin-right: 15px;
+    margin-left: auto;
+} */
+
+.sales-order {
+    background-color: #FF9F3E;
+    color: white;
+}
+
+.sales-order:hover {
+    background-color: #DC0100;
+    color: white;
+    cursor: pointer;
+}

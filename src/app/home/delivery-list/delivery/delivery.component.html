@@ -1,0 +1,471 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">DELIVERY LIST</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <div class="d-flex">
+                <a class="secondary-sup" [routerLink]="['/delivery-list/walking']">Walking List</a>
+                <div class="dropdown">
+                    <button class="credit-check" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i-feather class="download" name="download"></i-feather> Download Data
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="roles-main delivery-list-table pb-1">
+            <div class="d-flex align-items-center justify-content-between delivery-list-main mb-2">
+                <div class="d-flex for-media-setts">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchOrder('search')" [(ngModel)]="searchParams.search">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+                    <div class="search-inputs d-flex">
+                        <div class="search-inputs mr-10">
+                            <div class="input-style ">
+                                <div class="type-pass">
+                                    <input type="text" id="start_date" class="ctm-input" placeholder="From" name="start_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="startDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [maxDate]="endDate" autocomplete="off">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <i-feather class="calender" name="calendar"></i-feather>
+                                    </div>
+                                    <i-feather name="X" class="clear-filter" (click)="startDate = null;searchOrder('date')" *ngIf="startDate"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-inputs">
+                            <div class="input-style ">
+                                <div class="type-pass">
+                                    <input type="text" id="end_date" class="ctm-input" placeholder="To" name="end_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="endDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [minDate]="startDate" autocomplete="off">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <i-feather class="calender" name="calendar"></i-feather>
+                                    </div>
+                                    <i-feather name="X" class="clear-filter" (click)="endDate = null;searchOrder('date')" *ngIf="endDate"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-main mr-5">
+                    <ul class="nav nav-pills">
+                        <li><a class="tabs-charts active" data-toggle="pill" href="javascript:void(0)" (click)="deliveryListView = 1">Table View</a></li>
+                        <li><a class="tabs-charts" data-toggle="pill" href="javascript:void(0)" (click)="deliveryListView = 2">Card View</a></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="tab-content">
+
+                <div id="Table-View" class="tab-table tab-pane fade show in active" *ngIf="deliveryListView == 1">
+
+                    <div class="tables-roles-main tables-users-main table-responsive">
+                        <table class="table">
+                            <thead class="thead-ctm">
+                                <tr>
+                                    <th class="cursor-pointer" (click)="sortData('due_date')">
+                                        <p class="inner-cell">W/C <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'due_date' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'due_date' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('delivery')">
+                                        <p class="inner-cell">Delivery <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'delivery' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'delivery' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('work_number')">
+                                        <p class="inner-cell">Work# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                        <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('products.name')">
+                                        <p class="inner-cell">Product <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('finish_type')">
+                                        <p class="inner-cell">Finish <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'finish_type' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'finish_type' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('location')">
+                                        <p class="inner-cell">Location <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'location' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'location' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('postcode')">
+                                        <p class="inner-cell">Postcode <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'postcode' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'postcode' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Status</p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('progress')">
+                                        <p class="inner-cell">Progress <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th>Factory?</th>
+                                    <th>Sawed</th>
+                                    <th>Lip</th>
+                                    <th>Press</th>
+                                    <th>Mill</th>
+                                    <th>Mach</th>
+                                    <th>CNC</th>
+                                    <th>Spray</th>
+                                    <th>Bench</th>
+                                    <th>
+                                        <p class="inner-cell">Notes</p>
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="t-body-ctm" cdkDropList (cdkDropListDropped)="rowDrop($event)">
+                                <tr cdkDrag cdkDragLockAxis="y" class="active-row" [ngClass]="{'order-to-factory':delivery.status=='To Factory' && !delivery.on_hold, 'order-withdrawn':delivery.on_hold}" *ngFor="let delivery of deliveries;let i = index">
+                                    <td cdkDragHandle (onHidden)="dateChanged(i)" (click)="currentDate=delivery.due_date" [(bsValue)]="delivery.due_date" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'YYYY-MM-DD',containerClass:'theme-red', selectFromOtherMonth: true}"><i class="fas fa-grip-vertical mr-1"></i>{{ delivery.week_number }}
+                                    <td style="max-width:100px">
+                                        <span class="badge badge-danger" style="margin: 2px;font-size: 10px;" *ngFor=" let tag of delivery.delivery_tags">{{ tag.title }}</span>
+                                    </td>
+                                    <td>{{ delivery.work_number }}</td>
+                                    <td [style.background]="delivery.customer_color" class="customer-cell">
+                                        {{ delivery.customer.name }} <i class="fa-solid fa-palette" [(colorPicker)]="delivery.customer_color" [cpPositionOffset]="'-50%'" [cpPresetColors]="colorPresets" [cpPresetLabel]="''" [cpPositionRelativeToArrow]="false" [cpOKButton]="true" [cpOKButtonText]="'Done'" [cpOKButtonClass]="'btn btn-danger btn-xs'" [cpSaveClickOutside]="false" (colorPickerSelect)="colorChanged(i,delivery)"></i>
+                                    </td>
+                                    <td>{{ delivery.quantity }} {{ delivery.product.name }}</td>
+                                    <td>{{ delivery.finish_type }}</td>
+                                    <td>{{ delivery.location }}</td>
+                                    <td>{{ delivery.postcode }}</td>
+                                    <td>{{ delivery.on_hold ? 'On Hold' : delivery.status }}</td>
+                                    <td class="position-relative">
+                                        <div class="progress-cell-bar"><span [style.width.%]="delivery.progress"></span></div>{{ delivery.progress }}%
+                                    </td>
+                                    <td>
+                                        <div class="custom-box">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write')}">
+                                                <input type="checkbox" [checked]="delivery.status == 'In Factory'" [disabled]="!_auth.checkPermissions('delivery_list','write')" (change)="updateStatus(delivery,i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Sawed')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Sawed')" (change)="updateDeliveryList(delivery,'Sawed',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Lip')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Lip')" (change)="updateDeliveryList(delivery,'Lip',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Press')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Press')" (change)="updateDeliveryList(delivery,'Press',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Mill')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Mill')" (change)="updateDeliveryList(delivery,'Mill',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Mach')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Mach')" (change)="updateDeliveryList(delivery,'Mach',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'CNC')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'CNC')" (change)="updateDeliveryList(delivery,'CNC',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Spray')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Spray')" (change)="updateDeliveryList(delivery,'Spray',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="custom-box" *ngIf="checkProductAttribute(delivery,'Bench')">
+                                            <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                                <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Bench')" (change)="updateDeliveryList(delivery,'Bench',i)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="inner-cell view-anchor-tooltip">
+                                            <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="delivery.job_notes_count == '0'" (click)="addJobNote(delivery.id,i)">
+                                                <i-feather class="icon-width" name="plus"></i-feather>
+                                            </a>
+                                            <a class="view-anchor red" href="javascript:void(0)" *ngIf="delivery.job_notes_count != '0'" (click)="addJobNote(delivery.id,i)">
+                                                View
+                                            </a>
+                                            <div class="tooltiptext-view" *ngIf="delivery.job_notes_count != '0' && delivery.latest_job_note.description">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <a class="tooltip-anchor-modal" href="javascript:void(0)" (click)="addJobNote(delivery.id,i)">
+                                                        Add Note <i-feather class="icon-width w15" name="plus"></i-feather></a>
+
+                                                </div>
+                                                <div class="toop-hight" [innerHtml]="delivery.latest_job_note.description"></div>
+                                                <div class="date-tooptip-iner">
+                                                    {{ delivery.latest_job_note.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="list-icons-talbe">
+                                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="moveToStorage(delivery, i)" placement="top" ngbTooltip="Move to storage">
+                                                <i-feather class="icon-width" name="archive"></i-feather>
+                                            </a>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['/rod/delivery-notes', delivery.id]" placement="top" ngbTooltip="Delivery notes">
+                                                <i-feather class="icon-width" name="book"></i-feather>
+                                            </a>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="_auth.checkPermissions('delivery_list','write')" (click)="editWorkOrder(delivery, i)" placement="top" ngbTooltip="Edit">
+                                                <i-feather class="icon-width" name="edit-3"></i-feather>
+                                            </a>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="viewTimeline(delivery, i)" placement="top" ngbTooltip="Timeline">
+                                                <i-feather class="icon-width" name="trending-up"></i-feather>
+                                            </a>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="completeOrder(delivery,i)" *ngIf="_auth.checkPermissions('delivery_list','write')" placement="top" ngbTooltip="Complete">
+                                                <i-feather class="icon-width" name="check"></i-feather>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+                </div>
+
+            </div>
+
+        </div>
+        <div *ngIf="deliveryListView == 2" cdkDropList (cdkDropListDropped)="rowDrop($event)">
+            <div class="card-view-main-box" cdkDrag cdkDragLockAxis="y" [ngClass]="{'green-card-view':delivery.status=='To Factory' && !delivery.on_hold, 'red-card-view':delivery.on_hold}" *ngFor="let delivery of deliveries; let i = index">
+                <div class="card-view-content-box">
+                    <ul cdkDragHandle class="wc cursor-pointer" (onHidden)="dateChanged(i)" (click)="currentDate=delivery.due_date" [(bsValue)]="delivery.due_date" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'YYYY-MM-DD',containerClass:'theme-red', selectFromOtherMonth: true}">
+                        <li class="item-card-1">W/C</li>
+                        <li class="item-card"><i class="fas fa-grip-vertical mr-1"></i> {{ delivery.week_number }}</li>
+                    </ul>
+                </div>
+                <div class="card-view-content-box">
+                    <div class="inner-doube-ul d-flex align-items-center justify-content-between">
+                        <ul class="wc">
+                            <li class="item-card-1">Customer</li>
+                            <li class="item-card cursor-pointer customer-cell" [style.background]="delivery.customer_color">{{ delivery.customer.name }} <i class="fa-solid fa-palette" [(colorPicker)]="delivery.customer_color" [cpPositionOffset]="'-50%'" [cpPresetColors]="colorPresets" [cpPresetLabel]="''" [cpPositionRelativeToArrow]="false" [cpOKButton]="true" [cpOKButtonText]="'Done'" [cpOKButtonClass]="'btn btn-danger btn-xs'" [cpSaveClickOutside]="false" (colorPickerSelect)="colorChanged(i,delivery)"></i></li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Job Note</li>
+                            <li class="item-card">
+                                <div class="inner-cell view-anchor-tooltip">
+                                    <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="delivery.job_notes_count =='0'" (click)="addJobNote(delivery.id,i)">
+                                        <i-feather class="icon-width" name="plus"></i-feather>
+                                    </a>
+                                    <a class="view-anchor red" href="javascript:void(0)" *ngIf="delivery.job_notes_count  !='0'" (click)="addJobNote(delivery.id,i)">
+                                        View
+                                    </a>
+                                    <div class="tooltiptext-view" *ngIf="delivery.job_notes_count  !='0'&& delivery.latest_job_note.description">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <a class="tooltip-anchor-modal" href="javascript:void(0)" (click)="addJobNote(delivery.id,i)">
+                                                Add Note <i-feather class="icon-width w15" name="plus"></i-feather></a>
+
+                                        </div>
+                                        <div class="toop-hight" [innerHtml]="delivery.latest_job_note.description"></div>
+                                        <div class="date-tooptip-iner">
+                                            {{ delivery.latest_job_note.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="inner-doube-ul d-flex align-items-start justify-content-between">
+                        <ul class="wc">
+                            <li class="item-card-1">Location</li>
+                            <li class="item-card">{{ delivery.location }}</li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Postcode</li>
+                            <li class="item-card">{{ delivery.postcode }}</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="card-view-content-box">
+                    <div class="inner-doube-ul d-flex align-items-center justify-content-between">
+                        <ul class="wc">
+                            <li class="item-card-1">Delivery</li>
+                            <li class="item-card" style="flex-wrap: wrap;">
+                                <span class="badge badge-danger" style="margin: 2px;font-size: 10px;" *ngFor=" let tag of delivery.delivery_tags">{{ tag.title }}</span>
+                            </li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Product</li>
+                            <li class="item-card">{{ delivery.quantity }} {{ delivery.product.name }}</li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Status</li>
+                            <li class="item-card">{{ delivery.on_hold ? 'On Hold' : delivery.status }}</li>
+                        </ul>
+                    </div>
+                    <div class="inner-doube-ul d-flex align-items-start justify-content-between">
+                        <ul class="wc">
+                            <li class="item-card-1">Work#</li>
+                            <li class="item-card">{{ delivery.work_number }}</li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Finish</li>
+                            <li class="item-card">{{ delivery.finish_type }}</li>
+                        </ul>
+                        <ul class="wc">
+                            <li class="item-card-1">Progress</li>
+                            <li class="item-card position-relative">
+                                <div class="progress-card-bar"><span [style.width.%]="delivery.progress"></span></div>
+                                {{ delivery.progress }}%
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="d-flex sett-switches">
+                    <div class="switch-inline-main">
+                        <div class="switch-container-box">
+                            <p class="switch-label">
+                                Factory?
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write')}">
+                                    <input type="checkbox" [checked]="delivery.status == 'In Factory'" [disabled]="!_auth.checkPermissions('delivery_list','write')" (change)="updateStatus(delivery,i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Sawed')">
+                            <p class="switch-label">
+                                Sawed
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Sawed')" (change)="updateDeliveryList(delivery,'Sawed',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Lip')">
+                            <p class="switch-label">
+                                Lip
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Lip')" (change)="updateDeliveryList(delivery,'Lip',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Press')">
+                            <p class="switch-label">
+                                Press
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Press')" (change)="updateDeliveryList(delivery,'Press',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Mill')">
+                            <p class="switch-label">
+                                Mill
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Mill')" (change)="updateDeliveryList(delivery,'Mill',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Mach')">
+                            <p class="switch-label">
+                                Mach
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Mach')" (change)="updateDeliveryList(delivery,'Mach',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'CNC')">
+                            <p class="switch-label">
+                                CNC
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'CNC')" (change)="updateDeliveryList(delivery,'CNC',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Spray')">
+                            <p class="switch-label">
+                                Spray
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'" [checked]="checkProductAttributeStatus(delivery,'Spray')" (change)="updateDeliveryList(delivery,'Spray',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="switch-container-box" *ngIf="checkProductAttribute(delivery,'Bench')">
+                            <p class="switch-label">
+                                Bench
+                            </p>
+                            <div class="custom-box">
+                                <label class="switch" [ngClass]="{'disabled': !_auth.checkPermissions('delivery_list','write') || delivery.status != 'In Factory'}">
+                                    <input type="checkbox" [disabled]="!_auth.checkPermissions('delivery_list','write') || (delivery.status != 'In Factory' && !delivery.on_hold)" [checked]="checkProductAttributeStatus(delivery,'Bench')" (change)="updateDeliveryList(delivery,'Bench',i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-card-icons">
+                        <div class="list-icons-talbe">
+                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="moveToStorage(delivery,i)" placement="top" ngbTooltip="Move to storage">
+                                <i-feather class="icon-width" name="archive"></i-feather>
+                            </a>
+                            <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['/rod/delivery-notes', delivery.id]" placement="top" ngbTooltip="Delivery notes">
+                                <i-feather class="icon-width" name="book-open"></i-feather>
+                            </a>
+                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="editWorkOrder(delivery, i)" *ngIf="_auth.checkPermissions('delivery_list','write')" placement="top" ngbTooltip="Edit">
+                                <i-feather class="icon-width" name="edit-3"></i-feather>
+                            </a>
+                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="viewTimeline(delivery, i)" placement="top" ngbTooltip="Timeline">
+                                <i-feather class=" icon-width" name="trending-up"></i-feather>
+                            </a>
+                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="completeOrder(delivery,i)" *ngIf="_auth.checkPermissions('delivery_list','write')" placement="top" ngbTooltip="Complete">
+                                <i-feather class="icon-width" name="check"></i-feather>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+        </div>
+    </div>
+
+</div>

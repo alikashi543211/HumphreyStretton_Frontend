@@ -1,0 +1,164 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 for-respo-devices-rod justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ROD</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ADD</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{
+                        dateToday | date:'ww' }}</a></li>
+            </ul>
+
+        </div>
+
+        <div class="add-work-order">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group">
+                                    <label class="d-block">Product<span class="text-danger">*</span></label>
+                                    <select class="ctm-input bg-white" placeholder="Change Action"
+                                        (change)="selectProduct($event)">
+                                        <option value="select" selected>Select Product</option>
+                                        <option [value]="i" *ngFor="let product of products;let i = index">{{
+                                            product.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap">
+                                <span class="fiels-ctm" *ngFor="let product of selectedProducts;let i = index">
+                                    {{ product.name }} <i-feather class="remove-product" name="X"
+                                        (click)="removeProduct(i)"></i-feather>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="customerInputOut()">
+                                    <label class="d-block">Customers<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input type-input customer-input "
+                                        placeholder="Customer" (input)="searchCustomer($event)"
+                                        (focus)="customerInput = true" [(ngModel)]="customerName">
+                                    <div class="custom-dropdown-list" *ngIf="customerInput">
+                                        <ul>
+                                            <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                                                {{ customer.name }}
+                                            </li>
+                                            <li (click)="selectCustomer('new')">Add Customer</li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="customerName">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block">Sage Customer Id</label>
+                            <div class="type-pass">
+                                <input type="text" readonly class="ctm-input" placeholder="Sage Customer Id"
+                                    [(ngModel)]="sageCustomerId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2" *ngIf="showSageSearch">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="sageCustomerInputOut()">
+                                    <label class="d-block">Sage Customer</label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Search Sage Customer"
+                                        (input)="searchSageCustomer($event)" (focus)="sageCustomerInput = true"
+                                        [(ngModel)]="sageCustomerName">
+                                    <div class="custom-dropdown-list" *ngIf="sageCustomerInput">
+                                        <ul>
+                                            <li *ngFor="let customer of sageCustomers"
+                                                (click)="selectSageCustomer(customer)">
+                                                {{ customer.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="employeeInputOut()">
+                                    <label class="d-block">Sales Person<span class="text-danger">*</span></label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Sales Person"
+                                        (input)="searchSalePerson($event)" (focus)="employeeInput = true"
+                                        [(ngModel)]="employeeName">
+                                    <div class="custom-dropdown-list" *ngIf="employeeInput">
+                                        <ul class="add-scroll">
+                                            <li *ngFor="let employee of salePersons" (click)="selectEmployee(employee)">
+                                                {{ employee.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="input-style add-work mb-2">
+                            <div class="select-box">
+                                <div class="form-group position-relative" (focusout)="schedulerInputOut()">
+                                    <label class="d-block">Scheduler</label>
+                                    <input type="text" class="ctm-input type-input" placeholder="Scheduler"
+                                        (input)="searchEmployee($event)" (focus)="schedulerInput = true"
+                                        [(ngModel)]="scheduler">
+                                    <div class="custom-dropdown-list" *ngIf="schedulerInput">
+                                        <ul class="add-scroll">
+                                            <li *ngFor="let employee of employees" (click)="selectScheduler(employee)">
+                                                {{ employee.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <i-feather class="input-icon" name="search"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Contract Name<span class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add contract name"
+                                [(ngModel)]="workOrder.contract" name="contract">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Customer Order#</label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add customer order"
+                                [(ngModel)]="workOrder.order_number" name="order_number">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-style add-work mb-2">
+                            <label class="d-block"> Location<span class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Add location"
+                                [(ngModel)]="workOrder.location" name="location">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="btns-add-work">
+                            <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+                            <a href="javascript:void(0)" class="add-btn" (click)="addSalesOrder()">Add</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

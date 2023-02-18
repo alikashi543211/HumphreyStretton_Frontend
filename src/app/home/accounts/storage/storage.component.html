@@ -1,0 +1,260 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">ACCOUNTS</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">STORAGE</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+            <!-- <div class="d-flex">
+                <div class="dropdown">
+                    <button class="credit-check dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i-feather class="download" name="download"></i-feather> Download Data
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-dash card-storage">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="d-flex align-items-start justify-content-between flex-column">
+                            <div>
+                                <h3 class="carder-heading">TOTAL WORK ORDERS IN STORAGE</h3>
+                            </div>
+                            <div>
+                                <h3 class="carder-amount">{{ totalOrder }}</h3>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="carder-icons">
+                                <i class="fa fa-home"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-dash card-storage">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="d-flex align-items-start justify-content-between flex-column">
+                            <div>
+                                <h3 class="carder-heading">TOTAL VALUE</h3>
+                            </div>
+                            <div>
+                                <h3 class="carder-amount">{{ totalOrdersValue | currency:'GBP':'symbol' }}</h3>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="carder-icons cash">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="roles-main delivery-list-table pb-1">
+            <div class="d-flex align-items-center justify-content-between delivery-list-main mb-2">
+                <div class="d-flex for-media-setts">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" (input)="searchOrder('search')" [(ngModel)]="searchParams.search">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+                    <div class="search-inputs d-flex">
+                        <div class="search-inputs mr-10">
+                            <div class="input-style ">
+                                <div class="type-pass">
+                                    <input type="text" id="start_date" class="ctm-input" placeholder="From" name="start_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="startDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [maxDate]="endDate" autocomplete="off">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <i-feather class="calender" name="calendar"></i-feather>
+                                    </div>
+                                    <i-feather name="X" class="clear-filter" (click)="startDate = null;searchOrder('date')" *ngIf="startDate"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-inputs">
+                            <div class="input-style ">
+                                <div class="type-pass">
+                                    <input type="text" id="end_date" class="ctm-input" placeholder="To" name="end_date" (bsValueChange)="searchOrder('date')" [(bsValue)]="endDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}" [minDate]="startDate" autocomplete="off">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <i-feather class="calender" name="calendar"></i-feather>
+                                    </div>
+                                    <i-feather name="X" class="clear-filter" (click)="endDate = null;searchOrder('date')" *ngIf="endDate"></i-feather>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content">
+
+                <div id="Table-View" class="tab-table tab-pane fade show in d-block">
+
+                    <div class="tables-roles-main tables-users-main table-responsive">
+                        <table class="table">
+                            <thead class="thead-ctm">
+                                <tr>
+                                    <th class="cursor-pointer" (click)="sortData('work_number')">
+                                        <p class="inner-cell">Work# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                        <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('contract')">
+                                        <p class="inner-cell">Contract <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'contract' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('order_number')">
+                                        <p class="inner-cell">Order# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'order_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('products.name')">
+                                        <p class="inner-cell">Product <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'products.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Door</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Frame</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Other</p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('status')">
+                                        <p class="inner-cell">Status <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'status' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'status' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('progress')">
+                                        <p class="inner-cell">Progress <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'progress' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('fsc')">
+                                        <p class="inner-cell">FSC <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'fsc' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'fsc' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th class="cursor-pointer" (click)="sortData('invoice_no')">
+                                        <p class="inner-cell">Invoice <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'invoice_no' && searchParams.sort_value == 'ASC'"></i></p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Delivery Note</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Month</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Sch Ref</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Job Notes</p>
+                                    </th>
+                                    <th>
+                                        <p class="inner-cell">Actions</p>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="t-body-ctm">
+                                <tr class="active-row" [ngClass]="{'order-withdrawn': rod.status=='Withdrawn' ||  rod.on_hold, 'order-to-factory':rod.status=='To Factory' && !rod.on_hold,'order-storage':rod.status != 'Withdrawn' && rod.status != 'To Factory' && !rod.on_hold}" *ngFor="let rod of deliveries; let i = index">
+                                    <td>
+                                        <p class="inner-cell">{{ rod.work_number }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.customer.name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.contract }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.order_number }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.product.name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.product.name == 'Doors' ? rod.sale_order.value : '0.00' }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.product.name == 'Frame' ? rod.sale_order.value : '0.00' }}</p>
+                                    </td>
+
+                                    <td>
+                                        <p class="inner-cell">{{ rod.product.name != 'Doors' && rod.product.name != 'Frame' ? rod.sale_order.value+rod.sale_order.other : (rod.sale_order.other == 0 ? '0.00' : rod.sale_order.other) }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.status }}</p>
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="progress-cell-bar"><span [style.width.%]="rod.progress"></span></div>{{ rod.progress }}%
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell" *ngIf="rod.fsc">
+                                            <i-feather name="check"></i-feather>
+                                        </p>
+                                        <p class="inner-cell" *ngIf="!rod.fsc">-</p>
+                                    </td>
+                                    <td>
+                                        <div class="inner-cell list-icons-talbe-sec">
+                                            <p class="icon-anchor-list" *ngIf="!rod.invoice_no && !rod.edit_invoice">- <i-feather class="icon-width" name="edit-2"></i-feather>
+                                            </p>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="rod.invoice_no && !rod.edit_invoice">
+                                                {{ rod.invoice_no }} <i-feather class="icon-width" name="edit-2"></i-feather>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="inner-cell list-icons-talbe-sec">
+                                            <a class="icon-anchor-list red" *ngIf="rod.delivery_notes_count > 1" [routerLink]="['delivery-notes', rod.id]">Multiple</a>
+                                            <a class="icon-anchor-list" *ngIf="rod.delivery_notes_count == 0">
+                                                - <i-feather class="icon-width" name="edit-2" [routerLink]="['delivery-notes', rod.id]"></i-feather>
+                                            </a>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" [routerLink]="['delivery-notes', rod.id]" *ngIf="rod.delivery_notes_count == 1">
+                                                {{ rod.delivery_notes[0]?.ticket_no }} <i-feather class="icon-width" name="edit-2"></i-feather>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="inner-cell">{{ rod.sale_order.month | date: 'MMMM, YYYY' }}</p>
+                                    </td>
+                                    <td>
+                                        <div class="inner-cell list-icons-talbe-sec">
+                                            <p class="inner-cell icon-anchor-list" *ngIf="!rod.schedule_ref && !rod.edit_schedule_ref">- <i-feather class="icon-width" name="edit-2"></i-feather>
+                                            </p>
+                                            <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="rod.schedule_ref && !rod.edit_schedule_ref">
+                                                {{ rod.schedule_ref }} <i-feather class="icon-width" name="edit-2"></i-feather>
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="inner-cell view-anchor-tooltip">
+                                            <a class="view-anchor red" href="javascript:void(0)" *ngIf="rod.job_notes_count != '0'" (click)="addJobNote(rod.id,i)">
+                                                View
+                                            </a>
+                                            <div class="tooltiptext-view" *ngIf="rod.job_notes_count != '0' && rod.latest_job_note.description">
+                                                <div class="toop-hight" [innerHtml]="rod.latest_job_note.description"></div>
+                                                <div class="date-tooptip-iner">
+                                                    {{ rod.latest_job_note.created_at | date: 'h:mm a | dd LLLL, yyyy'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="inner-cell list-icons-talbe">
+                                            <a class="icon-anchor-list" href="javascript:void(0)" (click)="viewTimeline(rod,i)" placement="top" ngbTooltip="Timeline">
+                                                <i-feather class="icon-width" name="trending-up"></i-feather>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

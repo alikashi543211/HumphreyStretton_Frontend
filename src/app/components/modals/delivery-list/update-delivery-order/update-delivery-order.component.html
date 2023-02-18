@@ -1,0 +1,92 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title">EDIT {{ order.work_number }}</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Product<span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" placeholder="Change Action" [(ngModel)]="order.product_id">
+                            <option value="" selected>Select Product</option>
+                            <option [value]="product.id" *ngFor="let product of products;let i = index">{{ product.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group">
+                        <label class="d-block">Finish<span class="text-danger">*</span></label>
+                        <select class="ctm-input bg-white" [(ngModel)]="order.finish_type">
+                            <option value="null" selected>Select Finish</option>
+                            <option value="Primed">Primed</option>
+                            <option value="Lacquered">Lacquered</option>
+                            <option value="Laminate">Laminate</option>
+                            <option value="Sealant">Sealant</option>
+                            <option value="Other/Special">Other/Special</option>
+                            <option value="Sealed">Sealed</option>
+                            <option value="M.D.O">M.D.O</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Location<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Location" [(ngModel)]="order.location">
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="input-style mb-2">
+                <label class="d-block">Post Code<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="RM1234" [(ngModel)]="order.postcode">
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2" (focusout)="deliveryInputOut()">
+                <label class="d-block">Delivery<span class="text-danger">*</span><span>(Press Enter to add tags)</span></label>
+                <input type="text" class="ctm-input type-input customer-input " placeholder="Tags" [(ngModel)]="tagInput" (keyup)="addTag($event)" (focus)="deliveryTagInput = true">
+                <div class="custom-dropdown-list" *ngIf="deliveryTagInput">
+                    <ul>
+                        <li *ngFor="let tag of filteredTags()" (click)="selectTag(tag)">
+                            {{ tag.title }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <span class="fiels-ctm" *ngFor="let tag of order.delivery_tags;let i = index">
+                        {{ tag.title }} <i-feather class="remove-product" name="X" (click)="removeTag(i)"></i-feather>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Due Date<span class="text-danger">*</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Due Date" (bsValueChange)="dateChanged($event)" [(bsValue)]="orderDate" bsDatepicker [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red', selectFromOtherMonth: true}">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="close()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="updateOrder()">Done</a>
+    </div>
+</div>

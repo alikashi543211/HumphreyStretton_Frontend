@@ -1,0 +1,306 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title" *ngIf="type=='add'">ADD SALES ORDER</h4>
+    <h4 class="modal-title" *ngIf="type=='edit'">UPDATE SALES ORDER</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<!-- <div style="max-height: 80vh;
+overflow-x: clip !important;
+overflow-y: auto;"> -->
+    <div class="modal-body add-modal" *ngIf="type=='add'">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-style mb-2">
+                    <div class="select-box">
+                        <div class="form-group position-relative" (focusout)="customerInputOut()">
+                            <label class="d-block"><span class="red-label">Customers</span><span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Search customers"
+                                (input)="searchCustomers($event)" (focus)="customerInput = true"
+                                [(ngModel)]="selectedCustomer">
+                            <div class="custom-dropdown-list" *ngIf="customerInput">
+                                <ul>
+                                    <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                                        <strong>{{ customer.name }}</strong><span *ngIf="customer.contract"> |
+                                            <strong>Contract </strong>: {{ customer.contract }}</span><span
+                                            *ngIf="customer.phone_no"> | <strong>Phone No </strong>: {{ customer.phone_no
+                                            }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <i-feather class="input-icon" name="search"></i-feather>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="input-style mb-2">
+                    <div class="select-box">
+                        <div class="form-group position-relative" (focusout)="orderInputOut()">
+                            <label class="d-block"><span class="red-label">Work Order Number</span><span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="ctm-input type-input" placeholder="Search work orders"
+                                (input)="searchOrder($event)" (focus)="orderInput = true">
+                            <div class="custom-dropdown-list" *ngIf="orderInput">
+                                <ul>
+                                    <li *ngFor="let order of orders" (click)="selectOrder(order)"
+                                        [hidden]="checkSelectedOrder(order)"
+                                        [ngClass]="selectedCustomer && selectedCustomer != order.customer.name ? 'disabled' : ''">
+                                        <strong>{{ order.work_number }}</strong> | <strong>Customer </strong>: {{
+                                        order.customer.name }} | <strong>Contract </strong>: {{ order.contract }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <i-feather class="input-icon" name="search"></i-feather>
+                        </div>
+                        <div class="d-flex flex-wrap">
+                            <span class="fiels-ctm" *ngFor="let order of selectedOrders;let i= index">
+                                {{ order.model.work_number }} <span>
+                                    <i-feather class="plus-rotate" name="plus" (click)="removeOrder(i)"></i-feather>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="table-sales-modal table-responsive">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Customer Order#</th>
+                                <th>Contract</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let order of selectedOrders">
+                                <td>{{ order.model.customer.name }}</td>
+                                <td>{{ order.model.product.name }}</td>
+                                <td>{{ order.model.order_number }}</td>
+                                <td>{{ order.model.contract }}</td>
+                            </tr>
+                            <tr *ngIf="selectedOrders.length == 0">
+                                <td colspan="4" class="text-center">No Order Selected</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="sales-order-main-box">
+            <div class="row">
+                <ng-container *ngFor="let order of selectedOrders; let i=index">
+                    <div class="col-md-12">
+                        <div class="input-style">
+                            <label class="d-block">Value <span class="red-label">{{ order.model.work_number }}</span><span
+                                    class="text-danger"></span></label>
+                        </div>
+                        <div class="search-inputs mb-2 d-flex justify-content-between align-center">
+                            <div class="input-style px-1">
+                                <label class="d-block">{{ order.model.product.name }}</label>
+                                <div class="type-pass">
+                                    <input type="text" class="ctm-input" placeholder="" [(ngModel)]="order.value">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/ipnut-pound.png" alt="pound">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-style px-1">
+                                <label class="d-block">Other</label>
+                                <div class="type-pass">
+                                    <input type="text" class="ctm-input" placeholder="" [(ngModel)]="order.other">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/ipnut-pound.png" alt="pound">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-style">
+                                <label class="d-block">Delivery Fee</label>
+                                <div class="type-pass">
+                                    <input type="number" class="ctm-input" placeholder="" readonly
+                                        *ngIf="order.model.quotation && order.model.quotation?.delivery_fee"
+                                        [(ngModel)]="order.model.quotation.delivery_fee">
+                                    <input type="number" class="ctm-input" placeholder="" readonly
+                                        *ngIf="!order.model.quotation || !order.model.quotation?.delivery_fee" value="0">
+                                    <div class="icon-eye d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/ipnut-pound.png" alt="pound">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-style px-1">
+                                <label class="d-block">Due Date</label>
+                                <div class="type-pass">
+                                    <input type="text" class="ctm-input set-padding" placeholder=""
+                                        [(ngModel)]="order.month" bsDatepicker
+                                        [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red'}"
+                                        [placement]="'top'" [bsValue]="order.month">
+                                </div>
+                            </div>
+                            <div class="checkbox-width">
+                                <label class="custom-check">
+                                    <input type="checkbox" [checked]="false" (change)="addDueDateStatus($event, i)">
+                                    <span class="checkmark" placement="top" ngbTooltip="Fix Date"
+                                        tooltipClass="checkbox-tooltip"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+    
+                <div class="col-md-12">
+                    <div class="input-style mb-2">
+                        <div class="select-box">
+                            <div class="form-group position-relative" (focusout)="employeeInputOut()">
+                                <label class="d-block"><span class="red-label">Sales Person</span> <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="ctm-input type-input" placeholder="Search sales person"
+                                    (input)="getEmployees($event)" (focus)="employeeInput = true"
+                                    [(ngModel)]="selectedEmployee">
+                                <div class="custom-dropdown-list" *ngIf="employeeInput">
+                                    <ul>
+                                        <li *ngFor="let emp of employees" (click)="selectEmployee(emp)">
+                                            <strong>{{ emp.name }}</strong> <span *ngIf="emp.role_id">| {{ emp.role.title
+                                                }}</span> | <strong>{{ emp.email }}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <i-feather class="input-icon" name="search"></i-feather>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="input-style input-style-red mb-2">
+                        <label class="d-block"><span class="red-label">Notes</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Additional Notes"
+                            [(ngModel)]="newSalesOrder.delivery_note">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- </div> -->
+
+<div class="modal-body" *ngIf="type=='edit'">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="orderInputOut()">
+                        <label class="d-block"><span class="red-label">Work Order Number</span><span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Search work orders" readonly
+                            [(ngModel)]="selectedOrder">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-style">
+                <label class="d-block">Value <span class="red-label">{{ salesOrder.work_order.work_number }}</span><span
+                        class="text-danger"></span></label>
+            </div>
+            <div class="search-inputs mb-2 d-flex justify-content-between align-center">
+                <div class="input-style">
+                    <label class="d-block">{{ salesOrder.work_order.product.name }}</label>
+                    <div class="type-pass">
+                        <input type="number" class="ctm-input" placeholder="" [(ngModel)]="salesOrder.value">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/ipnut-pound.png" alt="pound">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-style">
+                    <label class="d-block">Other</label>
+                    <div class="type-pass">
+                        <input type="number" class="ctm-input" placeholder="" [(ngModel)]="salesOrder.other">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/ipnut-pound.png" alt="pound">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="search-inputs mb-2 d-flex align-center">
+                <div class="input-style">
+                    <label class="d-block">Delivery Fee</label>
+                    <div class="type-pass">
+                        <input type="number" class="ctm-input" placeholder="" readonly *ngIf="!salesOrder.work_order.quotation"
+                            value="0">
+                        <input type="number" class="ctm-input" placeholder="" readonly *ngIf="salesOrder.work_order.quotation"
+                            [(ngModel)]="salesOrder.work_order.quotation.delivery_fee">
+                        <div class="icon-eye d-flex align-items-center justify-content-center">
+                            <img src="assets/img/ipnut-pound.png" alt="pound">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-style mx-1">
+                    <label class="d-block">Due Date</label>
+                    <div class="type-pass">
+                        <input type="text" class="ctm-input set-padding" placeholder="" [(ngModel)]="selectedDate"
+                            bsDatepicker
+                            [bsConfig]="{ isAnimated: true, adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY',containerClass:'theme-red'}"
+                            [placement]="'right'" [bsValue]="selectedDate">
+                    </div>
+                </div>
+                <div class="checkbox-width">
+                    <label class="custom-check">
+                        <input type="checkbox" [checked]="false" (change)="updateDueDateStatus($event)">
+                        <span class="checkmark" placement="top" ngbTooltip="Fix Date"
+                            tooltipClass="checkbox-tooltip"></span>
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <div class="select-box">
+                    <div class="form-group position-relative" (focusout)="employeeInputOut()">
+                        <label class="d-block"><span class="red-label">Sales Person</span> <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="ctm-input type-input" placeholder="Search sales person"
+                            (input)="getEmployees($event)" (focus)="employeeInput = true"
+                            [(ngModel)]="selectedEmployee">
+                        <div class="custom-dropdown-list" *ngIf="employeeInput">
+                            <ul>
+                                <li *ngFor="let emp of employees" (click)="selectEmployee(emp)">
+                                    <strong>{{ emp.name }}</strong> <span *ngIf="emp.role_id">| {{ emp.role.title
+                                        }}</span> | <strong>{{ emp.email }}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <i-feather class="input-icon" name="search"></i-feather>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style input-style-red mb-2">
+                <label class="d-block"><span class="red-label">Notes</span></label>
+                <input type="text" class="ctm-input type-input" placeholder="Additional Notes"
+                    [(ngModel)]="salesOrder.delivery_note">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+    <div class="d-flex align-items-center justify-content-center w-100">
+        <a href="javascript:void(0)" class="discard-btn" (click)="cancel()">Discard</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="addOrder()" *ngIf="type == 'add'">Add</a>
+        <a href="javascript:void(0)" class="add-btn" (click)="updateOrder()" *ngIf="type == 'edit'">Update</a>
+    </div>
+</div>

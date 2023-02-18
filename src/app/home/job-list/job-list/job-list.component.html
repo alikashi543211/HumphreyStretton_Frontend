@@ -1,0 +1,155 @@
+<div class="dashboard-main">
+    <div class="dashboard-content ">
+        <div class="d-flex align-items-center mb-16 for-respo-devices-rod justify-content-between mr-70">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link " href="javascript:void(0)">Job List</a></li>
+
+                <li class="breadcrumb-item"><a class="breadcrumb-link active" href="javascript:void(0)">Week {{ dateToday | date:'ww' }}</a></li>
+            </ul>
+
+            <!-- <div class="d-flex btn-feature" *ngIf="checked">
+                <a class="Invoice" (click)="multipleUpdate('invoice_no')" href="javascript:void(0)">
+                    <i-feather class="plus" name="plus"></i-feather> Invoice
+                </a>
+                <a class="Schedule" (click)="multipleUpdate('schedule_ref')" href="javascript:void(0)">
+                    <i-feather class="plus" name="plus"></i-feather> Schedule Ref
+                </a>
+                <a class="btn-apply" (click)="addMultipleJobNote()" href="javascript:void(0)">
+                    <i-feather class="plus" name="plus"></i-feather> Job Note
+                </a>
+            </div>
+            <div class="d-flex for-respo-devices-rod-btn">
+                <a class="btn-apply" [routerLink]="['/rod/add']" *ngIf="_auth.checkPermissions('rod','write')">
+                    <i-feather class="plus" name="plus"></i-feather> Add Work Order
+                </a>
+                <div class="dropdown">
+                    <button class="credit-check " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i-feather class="download" name="download"></i-feather> Download Data
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('displayed')">Displayed</a>
+                        <a class="dropdown-item cursor-pointer" (click)="downloadData('all')">All</a>
+                    </div>
+                </div>
+            </div> -->
+
+
+        </div>
+        <div class="roles-main delivery-list-table ROD-main">
+            <div class="d-flex align-items-center justify-content-between rod-fixed-btn delivery-list-main">
+                <div class="d-flex for-media-setts">
+                    <div class="form-group sear-bar-roles position-relative mb-0">
+                        <input type="search" class="form-control form-control-roles" placeholder="Search.." id="email" [(ngModel)]="searchParams.search" (input)="searchRod()">
+                        <i-feather class="search-ctm" name="search"></i-feather>
+                    </div>
+
+                </div>
+                <!-- <div class="mr-70 d-flex">
+                    <div class="select-box" *ngIf="checked">
+                        <div class="form-group">
+                            <div class="arrow-design">
+                                <select class="form-control bulk-select-status" (change)="bulkStatusUpdate($event)">
+                                    <option value="select" selected>Bulk Status</option>
+                                    <option value="Booked">Booked</option>
+                                    <option value="To Factory">To Factory</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Withdrawn">Withdrawn</option>
+                                    <option value="On Hold">On Hold</option>
+                                    <option value="Off Hold">Off Hold</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="tab-table">
+                <div class="tables-roles-main tables-users-main table-responsive">
+                    <table class="table">
+                        <thead class="thead-ctm">
+                            <tr>
+                                <th class="cursor-pointer">
+                                    <p class="inner-cell">Work#</p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('customers.name')">
+                                    <p class="inner-cell">Customer <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'customers.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('employees.name')">
+                                    <p class="inner-cell">Sales Person <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'employees.name' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'employees.name' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer">
+                                    <p class="inner-cell">Scheduler </p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('work_orders.contract')">
+                                    <p class="inner-cell">Contract <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.contract' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.contract' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('work_orders.order_number')">
+                                    <p class="inner-cell">Order# <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.order_number' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'work_orders.order_number' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th class="cursor-pointer">
+                                    <p class="inner-cell">Product </p>
+                                </th>
+                                <th class="cursor-pointer" (click)="sortData('quotations.status')">
+                                    <p class="inner-cell">Status <i class="fa fa-arrow-down sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'quotations.status' && searchParams.sort_value == 'DESC'"></i> <i class="fa fa-arrow-up sorting-arrow" aria-hidden="true" *ngIf="searchParams.sort_column == 'quotations.status' && searchParams.sort_value == 'ASC'"></i></p>
+                                </th>
+                                <th>
+                                    <p class="inner-cell">Actions</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="t-body-ctm">
+                            <tr class="active-row" [ngClass]="{'order-withdrawn': rod.status=='Withdrawn' ||  rod.on_hold, 'order-to-factory':rod.status=='To Factory' && !rod.on_hold,'order-storage':rod.is_storage && !rod.on_hold}" *ngFor="let rod of jobLists; let i = index">
+                                <!-- <td *ngIf="_auth.checkPermissions('rod','write')">
+                                    <div class="remember-me">
+                                        <label class="custom-check custom-check-r">
+                                            <input type="checkbox" [checked]="rod.checked" [(ngModel)]="rod.checked" (change)="selectOptions()">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </td> -->
+                                <!-- <td>
+                                    <p class="inner-cell">{{ rod.work_number }}</p>
+                                </td> -->
+                                <td style="max-width:100px">
+                                    <span class="badge badge-danger" style="margin: 2px;font-size: 10px;" *ngFor=" let tag of rod.work_order_numbers">{{ tag }}</span>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ rod.customer.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ rod.employee.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ rod.scheduler?.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ rod.contract }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell">{{ rod.order_number }}</p>
+                                </td>
+                                <td>
+                                    <p class="inner-cell"><span *ngFor="let product of rod.products; let j=index">{{ product.name }} <span *ngIf="j != rod.products.length-1">,&nbsp;</span></span></p>
+                                </td>
+                                <td style="max-width:100px">
+                                    <span class="badge badge-success status-badge" *ngIf="rod.is_verified">verified</span>
+                                    <span class="badge badge-warning status-badge" *ngIf="!rod.is_verified">pending verification</span>
+                                </td>
+                                <td>
+                                    <div class="inner-cell list-icons-talbe">
+                                        <a class="icon-anchor-list" href="javascript:void(0)" *ngIf="_auth.checkPermissions('job_list','write')" placement="top" ngbTooltip="Edit Order" [routerLink]="['update', rod.id]">
+                                            <i-feather class="icon-width" name="edit-3"></i-feather>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <app-pagination [from]="pageFrom" [to]="pageTo" [pageSize]="searchParams.page_size" [currentPage]="searchParams.page" [totalPages]="totalPages" [total]="totalCount" (changePage)="changePage($event)" (ChangePageSize)="ChangePageSize($event)"></app-pagination>
+            </div>
+
+        </div>
+    </div>
+
+</div>

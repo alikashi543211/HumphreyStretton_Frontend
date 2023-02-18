@@ -1,0 +1,11 @@
+
+h2 {
+    margin: 15px 0px;
+}
+li {
+    background-color: white !important;
+    color: black !important;
+    border: unset !important;
+    border-top: 1px solid #d5d4d4 !important;
+    border-bottom: 1px solid #d5d4d4 !important;
+}

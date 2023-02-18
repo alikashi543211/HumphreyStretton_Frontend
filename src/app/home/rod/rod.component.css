@@ -1,0 +1,61 @@
+.form-group {
+    margin-bottom: 0px;
+}
+
+.select-box.inner-cell>.form-group {
+    width: 100%;
+}
+
+.select-box .arrow-design {
+    width: auto;
+    height: auto;
+}
+
+.select-box .form-control {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: inherit;
+    font-weight: 700;
+    color: #656565;
+    height: auto;
+    background: transparent;
+    border-radius: 10px;
+    border: 1px solid #E0E0E0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none
+}
+
+a.icon-anchor-list.red,
+a.view-anchor.red {
+    color: #DC0100 !important;
+}
+
+.edit-inline-input {
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px 15px;
+    width: 100px;
+}
+
+.bulk-select-status {
+    width: 16.3rem !important;
+    height: 4.4rem !important;
+    font-size: 12px !important;
+}
+
+.tables-roles-main.tables-users-main>table thead.thead-ctm>tr>th:first-child {
+    width: 30px !important;
+}
+
+.progress-cell-bar {
+    top: 10px;
+}
+
+.btn-apply {
+    height: 4rem;
+}

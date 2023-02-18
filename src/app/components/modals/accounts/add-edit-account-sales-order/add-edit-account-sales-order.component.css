@@ -1,0 +1,40 @@
+.search-inputs .input-style {
+    /* width: 28%; */
+}
+
+.align-center {
+    align-items: center;
+}
+
+.checkbox-width {
+    width: 7%;
+}
+
+.set-padding {
+    padding: 0rem 1rem !important;
+}
+
+.fix-date-label {
+    margin-top: -20px;
+    margin-bottom: 14px;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.add-modal {
+    padding-left: 20px;
+    overflow-y: auto;
+    overflow-x: clip;
+    max-height: 65vh;
+    padding-right: 20px !important;
+}
+
+
+@media (max-width: 1370px) {
+    .add-modal {
+        max-height: 80vh;
+    }
+}

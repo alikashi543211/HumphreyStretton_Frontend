@@ -1,0 +1,61 @@
+<!-- Modal Header -->
+<div class="modal-header">
+    <h4 class="modal-title">Add Job Notes</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body ">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-table table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Work#</th>
+                            <th>Customer</th>
+                            <th>Order#</th>
+                            <th>Product</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let order of orders">
+                            <td>{{ order.work_number }}</td>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.order_number }}</td>
+                            <td>{{ order.product.name }}</td>
+                            <td class="position-relative">
+                                <div class="progress-cell-bar"><span [style.width.%]="order.progress"></span></div>{{ order.progress }}%
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-style mb-2">
+                <label class="d-block">Title</label>
+                <input type="text" class="ctm-input type-input" placeholder="Title" [(ngModel)]="payload.title">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="text-area-modal">
+                <div class="input-style">
+                    <label class="d-block">Description</label>
+                    <textarea class="ctm-textarea" placeholder="Description" [(ngModel)]="payload.description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer ">
+    <div class="d-flex align-items-center justify-content-center w-100 ">
+        <a href="javascript:void(0) " class="discard-btn " (click)="cancel()">Cancel</a>
+        <a href="javascript:void(0) " class="add-btn " (click)="addJobNote()">Add</a>
+    </div>
+</div>

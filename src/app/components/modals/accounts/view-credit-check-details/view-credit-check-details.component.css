@@ -1,0 +1,18 @@
+.grand-total {
+    width: 76%;
+}
+
+.credit-check-table {
+    margin: 4rem 0px 6rem !important;
+    width: 100% !important;
+}
+
+.credit-check-table>thead tr th:first-child,
+.credit-check-table>tbody tr td:first-child {
+    text-align: left !important;
+}
+
+.credit-check-table>thead tr th:last-child,
+.credit-check-table>tbody tr td:last-child {
+    text-align: right !important;
+}
